@@ -13,11 +13,11 @@
 #define BIT7(x) (((x) >> 7) & 1)
 #define BIT15(x) (((x) >> 15) & 1)
 #define PC 15
+#define DONE 0x3000
 
-/*
 enum ACTION { read, write };
 enum SIZE { byte, word };
-
+/*
 typedef struct psw
 {
     unsigned short V:1;
@@ -46,22 +46,20 @@ extern union word_byte srcnum, dstnum;
 extern union mem memory;
 
 extern unsigned short regfile[2][16];
+
 /*
-
-
 unsigned carry[2][2][2] = {0,0,1,0,1,0,1,1};
 unsigned overflow[2][2][2] = {0,1,0,0,0,0,1,0};
 
-extern void bus(unsigned short mar, unsigned short *mbr, enum ACTION rw, enum SIZE bw);
 extern void update_psw(unsigned short src, unsigned short dst, unsigned short res, unsigned short wb);
 
 psw PSW;
 */
 
+
+extern void bus(unsigned short mar, unsigned short *mbr, enum ACTION rw, enum SIZE bw);
 extern int loader();
 extern void memory_dump();  // show contents of memory
-
-
-
+extern int fetch();
 
 #endif //XMX_EMULATOR_EMULATOR_H

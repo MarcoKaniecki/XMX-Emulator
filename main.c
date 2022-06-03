@@ -1,18 +1,30 @@
 #include "emulator.h"
 
-unsigned short regfile[2][16] = {0,0,0,0,0,0,0,0,0,
-                                 0,0,0,0,0,0,0,
-                                 0,1,2,4,6,16,32,-1};
+unsigned short regfile[2][16] = {0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                 0, 0, 0, 0, 0, 0, 0,
+                                 0, 1, 2, 4, 6, 16, 32, -1};
 
 
 // CPU FETCH, DECODE, EXECUTE
-int main() {
+int main()
+{
+    // IR = instruction register
+    unsigned short IR = 0;
+
     loader();
-    printf("LOADER DONE\n");
 
     memory_dump();
-    printf("MEMORY DUMPED\n");
+    // printf("STARTING ADDR: %X\n", regfile[0][PC]);
 
-    printf("STARTING ADDR: %X", regfile[0][PC]);
+    // TODO: check DONE in decoder
+    while (IR != 0x3000)
+    {
+        IR = fetch();
+        if (IR != 0)
+            printf("Sending to Decoder... %X\n", IR);
+
+    }
+
+
     return 0;
 }

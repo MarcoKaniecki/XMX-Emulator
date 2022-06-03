@@ -15,8 +15,7 @@ int loader()
     unsigned int rec_chksum;
     unsigned char type, type_num, checksum;
     unsigned int count, ahi, alo, byte;
-    unsigned short address;
-    // unsigned char *memory = calloc(0xFFFF, sizeof(char));
+    unsigned short address, final_addr;
 
     infile = fopen("Lab1.xme", "r");
 
@@ -37,7 +36,6 @@ int loader()
             printf("bad type: %s", srec);
             continue;
         }
-        // printf("%c%c\n", type, type_num);
 
         sscanf(&srec[2], "%2x", &count);
 
@@ -53,7 +51,6 @@ int loader()
 
         // convert from big-endian to little-endian
         address = ahi << 8 | alo;
-
 
         checksum = address + count;
 
@@ -82,6 +79,7 @@ int loader()
                 // printf("bad checksum %s", srec);
                 continue;
             }
+            printf("\n");
         }
         else if (type_num == '1')  // data/instr
         {
@@ -89,9 +87,9 @@ int loader()
             while (count != 1)
             {
                 sscanf(&srec[pos], "%2x", &byte);
-                memory.byte[address] = byte;
 
-                printf("%X %X\n", address, byte);
+                memory.byte[address] = byte;
+                // printf("%X %X\n", address, byte);
 
                 address++;
                 count = count - 1;
@@ -104,8 +102,9 @@ int loader()
             if ((checksum & 0x0F) != 0x0F)
             {
                 // printf("bad checksum: %s", srec);
-                continue;
+                // continue;
             }
+            final_addr = address;
         }
         else if (type_num == '9')
         {
@@ -126,15 +125,18 @@ int loader()
             if (checksum != 0xFF)
             {
                 // printf("bad checksum: %s", srec);
-                continue;
+                // continue;
             }
 
             regfile[0][PC] = address;
             // printf("Starting address: %x", address);
         }
-        printf("\n");
     }
+    // add a terminator which ends program when last data/instr in
+    // loader has been loaded into mem
+    memory.word[(final_addr >> 1) + 1] = DONE;
 
+    printf("\n********** LOADER DONE **********\n");
     fclose(infile);
     return 0;
 }
