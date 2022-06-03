@@ -1,0 +1,158 @@
+// Decoding S-records
+// Marco Kaniecki
+// B00783186
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define MAX_REC_LEN 128
+
+FILE *infile;
+char srec[MAX_REC_LEN];
+
+int main()
+{
+    // program that reads and decodes s-records
+    unsigned int rec_chksum, discard;
+    unsigned char type, type_num, checksum;
+    unsigned int count, ahi, alo, address, byte;
+    unsigned char *memory = calloc(0xFFFF, sizeof(char));
+
+    infile = fopen("Lab1.xme", "r");
+
+    while(fgets(srec, MAX_REC_LEN, infile) > 0)
+    {
+        // parse first character
+        sscanf(&srec[0], "%c", &type);
+
+        // parse second char which determines the function of the record
+        // 0 - header
+        // 1 - data/instr
+        // 9 - end record
+        sscanf(&srec[1], "%c", &type_num);
+
+        // check if first char is valid
+        if (type != 'S' || (type_num > 2 && type_num < 9))
+        {
+            printf("bad type: %s\n", srec);
+            continue;
+        }
+        // printf("%c%c\n", type, type_num);
+
+        sscanf(&srec[2], "%2x", &count);
+
+        // check if count is correct
+        // srec - 4 to remove type, count, LF and NUL and /2 to have number of bytes
+        if (count != (strlen(srec) - 6) / 2)
+        {
+            printf("bad count: %s\n", srec);
+            continue;
+        }
+
+        sscanf(&srec[4], "%2x%2x", &ahi, &alo);
+
+        // convert from big-endian to little-endian
+        address = ahi << 8 | alo;
+
+
+        checksum = address + count;
+
+        // determine data
+        int pos = 8;
+        count = count - 2;
+
+        // header
+        if (type_num == '0')
+        {
+            // stop when checksum byte is reached
+            while (count != 1)
+            {
+                // read byte by byte
+                sscanf(&srec[pos], "%2x", &byte);
+                printf("%c", byte);
+                count = count - 1;
+                pos = pos + 2;
+                checksum = checksum + byte;
+            }
+            sscanf(&srec[pos], "%2x", &rec_chksum);
+            checksum = checksum + rec_chksum;
+
+            if (checksum != 0xff)
+            {
+                printf("bad checksum\n");
+                continue;
+            }
+            printf("\n");
+        }
+        else if (type_num == '1')  // data/instr
+        {
+            //***********************************************************
+            // do checksum first, if valid then push into memory
+            // I've been trying to get a proper checksum but all my
+            // attempts failed so far
+            /*
+            printf("s1 count: %x\n", count + 0x02);
+            printf("s1 address: %x\n", address);
+            while (count > 1)
+            {
+                // read byte by byte
+                sscanf(&srec[pos], "%2x", &byte);
+                count = count - 1;
+                pos = pos + 2;
+                checksum = checksum + byte;
+            }
+            sscanf(&srec[pos], "%2x", &rec_chksum);
+            checksum = checksum + rec_chksum;
+            printf("checksum: %x\n", checksum);
+
+            if (checksum != 0xcf && checksum != 0xdf)
+            {
+                printf("bad checksum\n");
+                continue;
+            }
+             */
+            //***********************************************************
+            // assign bytes to memory
+            while (count != 1)
+            {
+                sscanf(&srec[pos], "%2x", &byte);
+                memory[address] = byte;
+                printf("%x %x\n", address, byte);
+                address++;
+                count = count - 1;
+                pos = pos + 2;
+            }
+        }
+        else if (type_num == '9')
+        {
+            pos = 2;
+            sscanf(&srec[pos], "%2x", &count);
+            pos+=2;
+
+            while (count != 1)
+            {
+                sscanf(&srec[pos], "%2x", &byte);
+                count = count - 1;
+                pos = pos + 2;
+                checksum = checksum + byte;
+            }
+            sscanf(&srec[pos], "%2x", &rec_chksum);
+            checksum = checksum + rec_chksum;
+
+            if (checksum != 0xff)
+            {
+                printf("bad checksum\n");
+                continue;
+            }
+
+            printf("Starting address: %x", address);
+        }
+        // printf("\n%s", srec);
+        // printf("^ %c %c %d %d %d\n\n", type, type_num, count, ahi, alo);
+        printf("\n");
+    }
+
+    fclose(infile);
+    return 0;
+}
