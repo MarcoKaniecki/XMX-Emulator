@@ -2,22 +2,21 @@
 // Marco Kaniecki
 // B00783186
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include "emulator.h"
 
-#define MAX_REC_LEN 128
+union mem memory = {0};
 
 FILE *infile;
 char srec[MAX_REC_LEN];
 
-int main()
+int loader()
 {
     // program that reads and decodes s-records
-    unsigned int rec_chksum, discard;
+    unsigned int rec_chksum;
     unsigned char type, type_num, checksum;
-    unsigned int count, ahi, alo, address, byte;
-    unsigned char *memory = calloc(0xFFFF, sizeof(char));
+    unsigned int count, ahi, alo, byte;
+    unsigned short address;
+    // unsigned char *memory = calloc(0xFFFF, sizeof(char));
 
     infile = fopen("Lab1.xme", "r");
 
@@ -35,7 +34,7 @@ int main()
         // check if first char is valid
         if (type != 'S' || (type_num > 2 && type_num < 9))
         {
-            printf("bad type: %s\n", srec);
+            printf("bad type: %s", srec);
             continue;
         }
         // printf("%c%c\n", type, type_num);
@@ -46,7 +45,7 @@ int main()
         // srec - 4 to remove type, count, LF and NUL and /2 to have number of bytes
         if (count != (strlen(srec) - 6) / 2)
         {
-            printf("bad count: %s\n", srec);
+            printf("bad count: %s", srec);
             continue;
         }
 
@@ -80,48 +79,32 @@ int main()
 
             if (checksum != 0xff)
             {
-                printf("bad checksum\n");
+                // printf("bad checksum %s", srec);
                 continue;
             }
-            printf("\n");
         }
         else if (type_num == '1')  // data/instr
         {
-            //***********************************************************
-            // do checksum first, if valid then push into memory
-            // I've been trying to get a proper checksum but all my
-            // attempts failed so far
-            /*
-            printf("s1 count: %x\n", count + 0x02);
-            printf("s1 address: %x\n", address);
-            while (count > 1)
+            // assign bytes to memory
+            while (count != 1)
             {
-                // read byte by byte
                 sscanf(&srec[pos], "%2x", &byte);
+                memory.byte[address] = byte;
+
+                printf("%X %X\n", address, byte);
+
+                address++;
                 count = count - 1;
                 pos = pos + 2;
                 checksum = checksum + byte;
             }
             sscanf(&srec[pos], "%2x", &rec_chksum);
             checksum = checksum + rec_chksum;
-            printf("checksum: %x\n", checksum);
 
-            if (checksum != 0xcf && checksum != 0xdf)
+            if ((checksum & 0x0F) != 0x0F)
             {
-                printf("bad checksum\n");
+                // printf("bad checksum: %s", srec);
                 continue;
-            }
-             */
-            //***********************************************************
-            // assign bytes to memory
-            while (count != 1)
-            {
-                sscanf(&srec[pos], "%2x", &byte);
-                memory[address] = byte;
-                printf("%x %x\n", address, byte);
-                address++;
-                count = count - 1;
-                pos = pos + 2;
             }
         }
         else if (type_num == '9')
@@ -140,16 +123,15 @@ int main()
             sscanf(&srec[pos], "%2x", &rec_chksum);
             checksum = checksum + rec_chksum;
 
-            if (checksum != 0xff)
+            if (checksum != 0xFF)
             {
-                printf("bad checksum\n");
+                // printf("bad checksum: %s", srec);
                 continue;
             }
 
-            printf("Starting address: %x", address);
+            regfile[0][PC] = address;
+            // printf("Starting address: %x", address);
         }
-        // printf("\n%s", srec);
-        // printf("^ %c %c %d %d %d\n\n", type, type_num, count, ahi, alo);
         printf("\n");
     }
 
