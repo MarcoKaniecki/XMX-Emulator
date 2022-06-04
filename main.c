@@ -23,6 +23,8 @@ int main()
         if (IR != 0)
             printf("Sending to Decoder... %X\n", IR);
 
+        decode(regfile[0][PC], IR);
+
     }
 
 

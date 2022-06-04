@@ -104,7 +104,9 @@ int loader()
                 // printf("bad checksum: %s", srec);
                 // continue;
             }
-            final_addr = address;
+            // assign final addr at highest memory location
+            if (final_addr < address)
+                final_addr = address;
         }
         else if (type_num == '9')
         {

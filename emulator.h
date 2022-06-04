@@ -15,6 +15,34 @@
 #define PC 15
 #define DONE 0x3000
 
+// *********** USED IN DECODER ************
+
+#define MSB3(x) (((x) >> 13) & 0x07)
+#define BL_OFF(x) ((x) & 0x1FFF)  // BL
+#define DEST(x) ((x) & 0x07)  // D D D bits 0 to 2
+
+#define MASK001X(x) (((x) >> 12) & 1)
+
+// for MOVx intructions
+#define MASK011(x)  (((x) >> 12) & 0x03)    // instruction
+#define BYTE011(x) (((x) >> 3) & 0xFF)  // Data byte
+// dabit shift 3 to right to get DRA D D D, giving 16 possibilities for the 16 total cpu registers
+#define DABIT(x) ((((x) >> 11) & 1) << 3)  // data (0) or Addr (1) register
+
+
+#define MASK1111(x)  (((x) >> 8) & 0x0F)  // instruction
+
+enum OPCODE00100X {BR, CEX};
+enum OPCODE10XX {MOVL, MOVLZ, MOVLS, MOVH};
+enum OPCODE0011 {SRAorRRC, ADD, ADDC, SUB, SUBC, CMP, XOR, AND, OR, BIT, BIS, BIC, MOV, MOV_SRA, SWAP, SWAP_SRA};
+
+extern int decode(unsigned short adr, unsigned short IR);
+extern void decode_LD_ST(int inst);
+extern void decode_LDR_STR(int inst);
+extern void decode_BR_to_CLRCC(int inst);
+extern void decode_SRA_to_SWAP(int inst);
+// ****************************************
+
 enum ACTION { read, write };
 enum SIZE { byte, word };
 /*

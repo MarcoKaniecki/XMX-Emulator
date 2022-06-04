@@ -1,102 +1,80 @@
-#include <stdio.h>
+#include "emulator.h"
 
 
-#define MSB3(x) (((x) >> 13) & 0x07)
-#define BL_OFF(x) ((x) & 0x1FFF)  // BL
-#define DEST(x) ((x) & 0x07)  // D D D bits 0 to 2
+int decode(unsigned short adr, unsigned short IR)
+{
+    unsigned short addr, inst;
 
-#define MASK001X(x) (((x) >> 12) & 1)
+    inst = IR;
+    addr = adr;
 
-// for MOVx intructions
-#define MASK011(x)  (((x) >> 12) & 0x03)    // instruction
-#define BYTE011(x) (((x) >> 3) & 0xFF)  // Data byte
-// dabit shift 3 to right to get DRA D D D, giving 16 possibilities for the 16 total cpu registers
-#define DABIT(x) ((((x) >> 11) & 1) << 3)  // data (0) or Addr (1) register
+    printf("decoding... %04X %04X    ", addr, inst);
 
-
-#define MASK1111(x)  (((x) >> 8) & 0x0F)  // instruction
-
-void decode_LD_ST(int inst);
-void decode_LDR_STR(int inst);
-void decode_BR_to_CLRCC(int inst);
-void decode_SRA_to_SWAP(int inst);
-
-enum OPCODE00100X {BR, CEX};
-enum OPCODE10XX {MOVL, MOVLZ, MOVLS, MOVH};
-enum OPCODE0011 {SRAorRRC, ADD, ADDC, SUB, SUBC, CMP, XOR, AND, OR, BIT, BIS, BIC, MOV, MOV_SRA, SWAP, SWAP_SRA};
-
-
-FILE *infile;
-
-int main() {
-    int addr, inst;
-
-    // assuming file exists and is readable
-    infile = fopen("Strings.DAT", "r");
-
-    while(fscanf(infile, "%4X %4X", &addr, &inst) > 0)
+    // determine subroutine from opcode
+    // look at 3 most significant bits first
+    switch (MSB3(inst))
     {
-        printf("%04X %04X    ", addr, inst);
+        case 0:  // BL
+            printf("BL     OFF:  #%04X", BL_OFF(inst));
+            break;
 
-        // determine subroutine from opcode
-        // look at 3 most significant bits first
-        switch (MSB3(inst))
-        {
-            case 0:  // BL
-                printf("BL     OFF:  #%04X", BL_OFF(inst));
-                break;
+        case 1:  // BR ... SWAP
+            if (MASK001X(inst))
+                decode_SRA_to_SWAP(inst);
+            else
+                decode_BR_to_CLRCC(inst);
+            break;
 
-            case 1:  // BR ... SWAP
-                if (MASK001X(inst))
-                    decode_SRA_to_SWAP(inst);
-                else
-                    decode_BR_to_CLRCC(inst);
-                break;
+        case 2:  // LD or ST
+            decode_LD_ST(inst);
+            break;
 
-            case 2:  // LD or ST
-                decode_LD_ST(inst);
-                break;
+        case 3:
+            printf("Illegal instruction\n");
+            if (inst == 0x3000)
+            {
+                printf("EOF\n");
+                exit(1);
+            }
+            break;
 
-            case 3:
-                printf("Illegal instruction");
-                break;
+        case 4:  // MOVL, MOVLZ
+        case 5:  // MOVLS, MOVH
+            // looking at bits 12 and 13
+            if (MASK011(inst) == MOVL)
+                printf("MOVL   ");
+            else if (MASK011(inst) == MOVLZ)
+                printf("MOVLZ  ");
+            else if (MASK011(inst) == MOVLS)
+                printf("MOVLS  ");
+            else  // == 3 MOVH
+                printf("MOVH   ");
 
-            case 4:  // MOVL, MOVLZ
-            case 5:  // MOVLS, MOVH
-                // looking at bits 12 and 13
-                if (MASK011(inst) == MOVL)
-                    printf("MOVL   ");
-                else if (MASK011(inst) == MOVLZ)
-                    printf("MOVLZ  ");
-                else if (MASK011(inst) == MOVLS)
-                    printf("MOVLS  ");
-                else  // == 3 MOVH
-                    printf("MOVH   ");
+            // print data and register
+            printf("Data: #%02X Register: %d", BYTE011(inst), DABIT(inst) + DEST(inst));
+            break;
 
-                // print data and register
-                printf("Data: #%02X Register: %d", BYTE011(inst), DABIT(inst) + DEST(inst));
-                break;
-
-            case 6:  // LDR
-            case 7:  // STR
-                decode_LDR_STR(inst);
-                break;
-        }
-        printf("\n");
+        case 6:  // LDR
+        case 7:  // STR
+            decode_LDR_STR(inst);
+            break;
     }
+    printf("\n");
     return 0;
 }
 
 // any instruction between and including BR and CLRCC get further processed here
 void decode_BR_to_CLRCC(int inst)
 {
-
+    printf("Decoding BR to CLRCC\n");
 }
 
 
 // any instruction between and including SRA and SWAP get further processed here
 void decode_SRA_to_SWAP(int inst)
 {
+    printf("Decoding SRA to SWAP\n");
+
     int opcode_segment2 = (inst >> 8) & 0x0F;
 
     switch (opcode_segment2)
@@ -150,6 +128,8 @@ void decode_SRA_to_SWAP(int inst)
 // instruction is either LD or ST
 void decode_LD_ST(int inst)
 {
+    printf("Decoding LD_ST\n");
+
     int LDorST = (inst >> 11) & 1; // 0 = LD, 1 = ST
     int DI = (inst >> 10) & 1;  // direct or indexed addressing
     int WorB = (inst >> 6) & 1;  // 0 = word, 1 = byte
@@ -225,6 +205,8 @@ void decode_LD_ST(int inst)
 // instruction is either LDR or STR
 void decode_LDR_STR(int inst)
 {
+    printf("Decoding LDR_STR\n");
+
     int OFF = (inst >> 7) & 0x1F;  // signed 5 bit offset
     unsigned int SDRA = (inst >> 12) & 1;  // either SRA or DRA
     unsigned int WorB = (inst >> 6) & 1;  // 0 = word, 1 = byte
