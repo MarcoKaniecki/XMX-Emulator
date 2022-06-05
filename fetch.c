@@ -8,9 +8,9 @@ int fetch()
 {
     unsigned short mar, mbr;
 
-    mar = regfile[0][PC];
+    mar = PC;
     bus(mar, &mbr, read, word);
-    regfile[0][PC] = regfile[0][PC] + 2;  // Increment PC by 2 because of word
+    PC = PC + 2;  // Increment PC by 2 because of word
     if (mbr != 0)
         printf("Fetching... %04X %04X\n", mar, mbr);
 

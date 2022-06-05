@@ -50,6 +50,21 @@
 		{
 			"isCMake" : true,
 			"isExternal" : true,
+			"path" : "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.22/Modules/CMakeFindCodeBlocks.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.22/Modules/CMakeExtraGeneratorDetermineCompilerMacrosAndIncludeDirs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.22/Modules/ProcessorCount.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
 			"path" : "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.22/Modules/CMakeCInformation.cmake"
 		},
 		{
@@ -106,8 +121,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/Users/mk/Desktop/XMX-Emulator/cmake-build-debug",
-		"source" : "/Users/mk/Desktop/XMX-Emulator"
+		"build" : "/Users/marcokaniecki/Desktop/XMX-Emulator/cmake-build-debug",
+		"source" : "/Users/marcokaniecki/Desktop/XMX-Emulator"
 	},
 	"version" : 
 	{

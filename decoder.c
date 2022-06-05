@@ -8,14 +8,16 @@ int decode(unsigned short adr, unsigned short IR)
     inst = IR;
     addr = adr;
 
-    printf("decoding... %04X %04X    ", addr, inst);
+    // printf("decoding... %04X %04X\n", addr, inst);
 
     // determine subroutine from opcode
     // look at 3 most significant bits first
     switch (MSB3(inst))
     {
         case 0:  // BL
-            printf("BL     OFF:  #%04X", BL_OFF(inst));
+            if (BL_OFF(inst) == 0)
+                break;
+            printf("BL     OFF:  #%04X\n", BL_OFF(inst));
             break;
 
         case 1:  // BR ... SWAP
@@ -30,28 +32,28 @@ int decode(unsigned short adr, unsigned short IR)
             break;
 
         case 3:
-            printf("Illegal instruction\n");
-            if (inst == 0x3000)
+            if (inst == BREAK_INSTRUCTION)
             {
-                printf("EOF\n");
-                exit(1);
+                printf("END\n");  // TODO: make sure this works
+                return 0;
             }
+            printf("Illegal instruction\n");
             break;
 
         case 4:  // MOVL, MOVLZ
         case 5:  // MOVLS, MOVH
             // looking at bits 12 and 13
             if (MASK011(inst) == MOVL)
-                printf("MOVL   ");
+                printf("MOVL   \n");
             else if (MASK011(inst) == MOVLZ)
-                printf("MOVLZ  ");
+                printf("MOVLZ  \n");
             else if (MASK011(inst) == MOVLS)
-                printf("MOVLS  ");
+                printf("MOVLS  \n");
             else  // == 3 MOVH
-                printf("MOVH   ");
+                printf("MOVH   \n");
 
             // print data and register
-            printf("Data: #%02X Register: %d", BYTE011(inst), DABIT(inst) + DEST(inst));
+            printf("Data: #%02X Register: %d\n", BYTE011(inst), DABIT(inst) + DEST(inst));
             break;
 
         case 6:  // LDR
@@ -59,9 +61,9 @@ int decode(unsigned short adr, unsigned short IR)
             decode_LDR_STR(inst);
             break;
     }
-    printf("\n");
     return 0;
 }
+
 
 // any instruction between and including BR and CLRCC get further processed here
 void decode_BR_to_CLRCC(int inst)
@@ -125,6 +127,7 @@ void decode_SRA_to_SWAP(int inst)
     }
 }
 
+
 // instruction is either LD or ST
 void decode_LD_ST(int inst)
 {
@@ -144,7 +147,7 @@ void decode_LD_ST(int inst)
     if (DI == 0)  // direct addressing
     {
         // in direct SDRA, PRPO and ID can be ignored
-        printf("%s.%c  SRCreg: %d  DSTreg: %d", (LDorST == 0) ? "LD" : "ST", (WorB == 0) ? 'W' : 'B', SRCreg, DSTreg);
+        printf("%s.%c  SRCreg: %d  DSTreg: %d\n", (LDorST == 0) ? "LD" : "ST", (WorB == 0) ? 'W' : 'B', SRCreg, DSTreg);
         return;
     }
 
@@ -173,7 +176,7 @@ void decode_LD_ST(int inst)
                 printf("%d- ", SRCreg);
                 break;
         }
-        printf("DSTreg: %d", DSTreg);
+        printf("DSTreg: %d\n", DSTreg);
     }
     else  // ST
     {
@@ -198,6 +201,7 @@ void decode_LD_ST(int inst)
                 printf("%d-", DSTreg);
                 break;
         }
+        printf("\n");
     }
 }
 
@@ -231,5 +235,5 @@ void decode_LDR_STR(int inst)
         SRCreg = SRCreg | (SDRA << 3);  // addr or data
         printf("STR");
     }
-    printf(".%c  SRCreg: %d  DSTreg: %d  Off: %d", (WorB == 0) ? 'W' : 'B', SRCreg, DSTreg, OFF);
+    printf(".%c  SRCreg: %d  DSTreg: %d  Off: %d\n", (WorB == 0) ? 'W' : 'B', SRCreg, DSTreg, OFF);
 }

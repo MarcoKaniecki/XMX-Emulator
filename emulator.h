@@ -9,14 +9,26 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define MAX_USER_INPUT_LEN 32
 #define MAX_REC_LEN 128
 #define BIT7(x) (((x) >> 7) & 1)
 #define BIT15(x) (((x) >> 15) & 1)
-#define PC 15
-#define DONE 0x3000
+
+#define LR regfile[0][13]
+#define SP regfile[0][14]
+#define PC regfile[0][15]
+
+#define SET 1
+#define CLEAR 0
+
+#define BREAK_INSTRUCTION 0x6000
+
+// *********** Initial CPU state **********
+#define PC_default 0x0800  // see p.81 in XMX Design Document
+#define SP_default 0x0800
+
 
 // *********** USED IN DECODER ************
-
 #define MSB3(x) (((x) >> 13) & 0x07)
 #define BL_OFF(x) ((x) & 0x1FFF)  // BL
 #define DEST(x) ((x) & 0x07)  // D D D bits 0 to 2
@@ -28,7 +40,6 @@
 #define BYTE011(x) (((x) >> 3) & 0xFF)  // Data byte
 // dabit shift 3 to right to get DRA D D D, giving 16 possibilities for the 16 total cpu registers
 #define DABIT(x) ((((x) >> 11) & 1) << 3)  // data (0) or Addr (1) register
-
 
 #define MASK1111(x)  (((x) >> 8) & 0x0F)  // instruction
 
@@ -70,10 +81,18 @@ union word_byte
 };
 
 extern union word_byte srcnum, dstnum;
+extern union word_byte get_src_num, set_dst_num;
 
 extern union mem memory;
 
 extern unsigned short regfile[2][16];
+
+extern unsigned short custom_breakpoint_loc;  // contains address of where custom breakpoint is
+extern unsigned short custom_PC;  // check in loader if custom PC has been set, set in set_starting_adr.c
+extern unsigned short given_PC;  // PC which is read in S-Records
+
+// when a custom breakpoint is set an addr containing data/instr may be overwritten
+extern unsigned short data_overwritten_at_breakpoint;
 
 /*
 unsigned carry[2][2][2] = {0,0,1,0,1,0,1,1};
@@ -84,6 +103,11 @@ extern void update_psw(unsigned short src, unsigned short dst, unsigned short re
 psw PSW;
 */
 
+extern void set_default_breakpoint(unsigned short adr);
+extern void set_custom_breakpoint(unsigned short adr);
+extern void set_PC(unsigned short adr);
+extern void display_regfile();
+extern void modify_regfile();
 
 extern void bus(unsigned short mar, unsigned short *mbr, enum ACTION rw, enum SIZE bw);
 extern int loader();

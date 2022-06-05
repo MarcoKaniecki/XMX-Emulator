@@ -1,10 +1,12 @@
 // Decoding S-records
 // Marco Kaniecki
-// B00783186
 
 #include "emulator.h"
 
 union mem memory = {0};
+
+// initially no custom PC has been set
+unsigned short custom_PC = CLEAR;
 
 FILE *infile;
 char srec[MAX_REC_LEN];
@@ -130,13 +132,14 @@ int loader()
                 // continue;
             }
 
-            regfile[0][PC] = address;
-            // printf("Starting address: %x", address);
+            // prevent overwriting PC after manually setting it
+            if (custom_PC == CLEAR)
+                PC = address;  // assign program counter to starting addr
+
         }
     }
-    // add a terminator which ends program when last data/instr in
-    // loader has been loaded into mem
-    memory.word[(final_addr >> 1) + 1] = DONE;
+
+    set_default_breakpoint(final_addr);
 
     printf("\n********** LOADER DONE **********\n");
     fclose(infile);
