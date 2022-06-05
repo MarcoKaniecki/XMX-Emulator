@@ -8,6 +8,8 @@ int decode(unsigned short adr, unsigned short IR)
     inst = IR;
     addr = adr;
 
+    CPU_CLOCK++;
+
     // printf("decoding... %04X %04X\n", addr, inst);
 
     // determine subroutine from opcode
@@ -35,7 +37,7 @@ int decode(unsigned short adr, unsigned short IR)
             if (inst == BREAK_INSTRUCTION)
             {
                 printf("END\n");  // TODO: make sure this works
-                return 0;
+                return END;
             }
             printf("Illegal instruction\n");
             break;
@@ -61,7 +63,7 @@ int decode(unsigned short adr, unsigned short IR)
             decode_LDR_STR(inst);
             break;
     }
-    return 0;
+    return 1;
 }
 
 

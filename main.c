@@ -1,11 +1,11 @@
 #include "emulator.h"
 
 unsigned short custom_breakpoint_loc;
+unsigned long CPU_CLOCK = 0;
 
 int main()
 {
-    // IR = instruction register
-    unsigned short IR;
+    unsigned short IR, action, first_run = TRUE;
     char UI[MAX_USER_INPUT_LEN];
 
     // TODO: add argc and argv checks to open file through drag and drop
@@ -15,8 +15,10 @@ int main()
     while (1)
     {
         printf("\n**** XMX Emulator - User Interface *****\n");
+        printf("CPU clock cycles: %lu\n", CPU_CLOCK);
         printf("r   - run\n");
         printf("md  - Memory Dump\n");
+        printf("dc  - Display Contents at Memory Location\n");
         printf("drf - Display Register File\n");
         printf("mrf - Modify Register File\n");
         printf("sb  - Set Breakpoint\n");
@@ -32,18 +34,22 @@ int main()
 
         if (strcmp(UI, "r") == 0)  // run
         {
-            IR = 0;  // reset if another run is performed
+            action = 1;  // reset if another run is performed
 
             // load data/instructions into main memory
-            loader();
-            // TODO: check BREAKPOINT in decoder
-            while (IR != 0x6000)
+            if (first_run)
+            {
+                loader();
+                first_run = FALSE;
+            }
+
+            while (action != END)
             {
                 IR = fetch();
                 if (IR != 0)
                     printf("Sending to Decoder... %X\n", IR);
 
-                decode(PC, IR);
+                action = decode(PC, IR);
             }
             // execute run from decode func
         }

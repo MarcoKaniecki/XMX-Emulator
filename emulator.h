@@ -19,10 +19,15 @@
 #define PC regfile[0][15]
 
 #define SET 1
+#define TRUE 1
+#define FALSE 0
 #define CLEAR 0
+#define END 0
 
 #define BREAK_INSTRUCTION 0x6000
 
+
+extern unsigned long CPU_CLOCK;
 // *********** Initial CPU state **********
 #define PC_default 0x0800  // see p.81 in XMX Design Document
 #define SP_default 0x0800
@@ -113,5 +118,12 @@ extern void bus(unsigned short mar, unsigned short *mbr, enum ACTION rw, enum SI
 extern int loader();
 extern void memory_dump();  // show contents of memory
 extern int fetch();
+
+
+
+
+// Functions provided by Dr. Hughes
+unsigned short sign_ext(unsigned short offset, unsigned short signbit);
+unsigned short extract_bits(unsigned short value, unsigned short signbit);
 
 #endif //XMX_EMULATOR_EMULATOR_H

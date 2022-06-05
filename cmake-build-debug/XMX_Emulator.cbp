@@ -78,6 +78,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/marcokaniecki/Desktop/XMX-Emulator/SignExtn.c">
+			<Option target="XMX_Emulator"/>
+		</Unit>
 		<Unit filename="/Users/marcokaniecki/Desktop/XMX-Emulator/bus.c">
 			<Option target="XMX_Emulator"/>
 		</Unit>

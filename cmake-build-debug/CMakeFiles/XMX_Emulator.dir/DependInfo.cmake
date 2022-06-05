@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/Users/marcokaniecki/Desktop/XMX-Emulator/SignExtn.c" "CMakeFiles/XMX_Emulator.dir/SignExtn.c.o" "gcc" "CMakeFiles/XMX_Emulator.dir/SignExtn.c.o.d"
   "/Users/marcokaniecki/Desktop/XMX-Emulator/bus.c" "CMakeFiles/XMX_Emulator.dir/bus.c.o" "gcc" "CMakeFiles/XMX_Emulator.dir/bus.c.o.d"
   "/Users/marcokaniecki/Desktop/XMX-Emulator/decoder.c" "CMakeFiles/XMX_Emulator.dir/decoder.c.o" "gcc" "CMakeFiles/XMX_Emulator.dir/decoder.c.o.d"
   "/Users/marcokaniecki/Desktop/XMX-Emulator/fetch.c" "CMakeFiles/XMX_Emulator.dir/fetch.c.o" "gcc" "CMakeFiles/XMX_Emulator.dir/fetch.c.o.d"

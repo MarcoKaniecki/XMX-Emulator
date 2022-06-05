@@ -8,6 +8,8 @@ int fetch()
 {
     unsigned short mar, mbr;
 
+    CPU_CLOCK++;
+
     mar = PC;
     bus(mar, &mbr, read, word);
     PC = PC + 2;  // Increment PC by 2 because of word

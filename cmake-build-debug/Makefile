@@ -129,6 +129,30 @@ XMX_Emulator/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/build
 .PHONY : XMX_Emulator/fast
 
+SignExtn.o: SignExtn.c.o
+.PHONY : SignExtn.o
+
+# target to build an object file
+SignExtn.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/SignExtn.c.o
+.PHONY : SignExtn.c.o
+
+SignExtn.i: SignExtn.c.i
+.PHONY : SignExtn.i
+
+# target to preprocess a source file
+SignExtn.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/SignExtn.c.i
+.PHONY : SignExtn.c.i
+
+SignExtn.s: SignExtn.c.s
+.PHONY : SignExtn.s
+
+# target to generate assembly for a file
+SignExtn.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/SignExtn.c.s
+.PHONY : SignExtn.c.s
+
 bus.o: bus.c.o
 .PHONY : bus.o
 
@@ -354,6 +378,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... XMX_Emulator"
+	@echo "... SignExtn.o"
+	@echo "... SignExtn.i"
+	@echo "... SignExtn.s"
 	@echo "... bus.o"
 	@echo "... bus.i"
 	@echo "... bus.s"

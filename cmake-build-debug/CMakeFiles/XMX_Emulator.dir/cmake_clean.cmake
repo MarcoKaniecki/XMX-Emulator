@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/XMX_Emulator.dir/SignExtn.c.o"
+  "CMakeFiles/XMX_Emulator.dir/SignExtn.c.o.d"
   "CMakeFiles/XMX_Emulator.dir/bus.c.o"
   "CMakeFiles/XMX_Emulator.dir/bus.c.o.d"
   "CMakeFiles/XMX_Emulator.dir/decoder.c.o"
