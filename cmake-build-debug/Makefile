@@ -201,6 +201,30 @@ decoder.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/decoder.c.s
 .PHONY : decoder.c.s
 
+execute.o: execute.c.o
+.PHONY : execute.o
+
+# target to build an object file
+execute.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/execute.c.o
+.PHONY : execute.c.o
+
+execute.i: execute.c.i
+.PHONY : execute.i
+
+# target to preprocess a source file
+execute.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/execute.c.i
+.PHONY : execute.c.i
+
+execute.s: execute.c.s
+.PHONY : execute.s
+
+# target to generate assembly for a file
+execute.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/execute.c.s
+.PHONY : execute.c.s
+
 fetch.o: fetch.c.o
 .PHONY : fetch.o
 
@@ -387,6 +411,9 @@ help:
 	@echo "... decoder.o"
 	@echo "... decoder.i"
 	@echo "... decoder.s"
+	@echo "... execute.o"
+	@echo "... execute.i"
+	@echo "... execute.s"
 	@echo "... fetch.o"
 	@echo "... fetch.i"
 	@echo "... fetch.s"

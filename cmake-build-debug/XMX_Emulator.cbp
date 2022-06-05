@@ -90,6 +90,9 @@
 		<Unit filename="/Users/marcokaniecki/Desktop/XMX-Emulator/emulator.h">
 			<Option target="XMX_Emulator"/>
 		</Unit>
+		<Unit filename="/Users/marcokaniecki/Desktop/XMX-Emulator/execute.c">
+			<Option target="XMX_Emulator"/>
+		</Unit>
 		<Unit filename="/Users/marcokaniecki/Desktop/XMX-Emulator/fetch.c">
 			<Option target="XMX_Emulator"/>
 		</Unit>

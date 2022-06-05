@@ -34,6 +34,8 @@ extern unsigned long CPU_CLOCK;
 
 
 // *********** USED IN DECODER ************
+#define RC(x) (((x) >> 7) & 1)  // TODO: add to something instr
+
 #define MSB3(x) (((x) >> 13) & 0x07)
 #define BL_OFF(x) ((x) & 0x1FFF)  // BL
 #define DEST(x) ((x) & 0x07)  // D D D bits 0 to 2
@@ -61,6 +63,7 @@ extern void decode_SRA_to_SWAP(int inst);
 
 enum ACTION { read, write };
 enum SIZE { byte, word };
+
 /*
 typedef struct psw
 {
@@ -119,6 +122,9 @@ extern int loader();
 extern void memory_dump();  // show contents of memory
 extern int fetch();
 
+
+// execute functions
+extern void ADDtoOR_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned short SC, unsigned short Dst);
 
 
 

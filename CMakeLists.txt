@@ -12,5 +12,5 @@ add_executable(XMX_Emulator
         decoder.c
         set_breakpoint.c
         register_file.c
-        set_PC.c SignExtn.c)
+        set_PC.c SignExtn.c execute.c)
 # psw.c

@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/XMX_Emulator.dir/bus.c.o.d"
   "CMakeFiles/XMX_Emulator.dir/decoder.c.o"
   "CMakeFiles/XMX_Emulator.dir/decoder.c.o.d"
+  "CMakeFiles/XMX_Emulator.dir/execute.c.o"
+  "CMakeFiles/XMX_Emulator.dir/execute.c.o.d"
   "CMakeFiles/XMX_Emulator.dir/fetch.c.o"
   "CMakeFiles/XMX_Emulator.dir/fetch.c.o.d"
   "CMakeFiles/XMX_Emulator.dir/loader.c.o"

@@ -18,7 +18,7 @@ int main()
         printf("CPU clock cycles: %lu\n", CPU_CLOCK);
         printf("r   - run\n");
         printf("md  - Memory Dump\n");
-        printf("dc  - Display Contents at Memory Location\n");
+        // printf("dc  - Display Contents at Memory Location\n");
         printf("drf - Display Register File\n");
         printf("mrf - Modify Register File\n");
         printf("sb  - Set Breakpoint\n");
