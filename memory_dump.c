@@ -7,14 +7,13 @@
 void memory_dump()
 {
     printf("\n******** DUMPING  MEMORY ********\n");
-    printf("W = [ B.1001 | B.1000 ]\n");
-
-    for(unsigned int i = 0; i < sizeof(memory.byte); i++)
+    unsigned int i = 0;
+    while(memory.word[i] != BREAK_INSTRUCTION)
     {
-        if (memory.byte[i] == 0)  // ignore anything in mem with a zero
-            continue;
-        // print same word index as previous, on odd numbers
-        printf("W:%04X  B:%04X   %02X\n", (i % 2 == 0)? i/2 : (i - 1)/2, i, memory.byte[i]);
+        // only print when register isn't empty
+        if (memory.word[i] != 0)
+            printf("0x%04X %04X\n", i, memory.word[i]);
+        i++;
     }
     printf("********* MEMORY DUMPED *********\n\n");
 }

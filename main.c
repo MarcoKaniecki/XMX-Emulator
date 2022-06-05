@@ -91,7 +91,7 @@ int main()
         {
             int set_starting_adr;
 
-            printf("Specify PC location\n");
+            printf("Specify PC location as word\n");
             printf("> ");
             scanf("%X", &set_starting_adr);
             getchar();

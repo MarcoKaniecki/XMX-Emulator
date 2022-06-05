@@ -180,13 +180,13 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "SignExtn.c",
+			"path" : "execute.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "execute.c",
+			"path" : "SignExtn.c",
 			"sourceGroupIndex" : 0
 		}
 	],

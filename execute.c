@@ -3,6 +3,7 @@
 //
 #include "emulator.h"
 
+/*
 void ADDtoOR_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned short SC, unsigned short Dst)
 {
     unsigned short temp_reg;
@@ -18,3 +19,4 @@ void ADDtoOR_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsign
         return; // TODO: add byte operation
     }
 }
+ */

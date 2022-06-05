@@ -14,7 +14,7 @@ int fetch()
     bus(mar, &mbr, read, word);
     PC = PC + 2;  // Increment PC by 2 because of word
     if (mbr != 0)
-        printf("Fetching... %04X %04X\n", mar, mbr);
+        printf("Fetching... 0x%04X %04X\n", mar, mbr);
 
     return mbr;
 }

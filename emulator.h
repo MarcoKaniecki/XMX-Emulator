@@ -14,9 +14,9 @@
 #define BIT7(x) (((x) >> 7) & 1)
 #define BIT15(x) (((x) >> 15) & 1)
 
-#define LR regfile[0][13]
-#define SP regfile[0][14]
-#define PC regfile[0][15]
+#define LR regfile[0][13].word
+#define SP regfile[0][14].word
+#define PC regfile[0][15].word
 
 #define SET 1
 #define TRUE 1
@@ -93,11 +93,10 @@ extern union word_byte get_src_num, set_dst_num;
 
 extern union mem memory;
 
-extern unsigned short regfile[2][16];
+extern union word_byte regfile[2][16];
 
 extern unsigned short custom_breakpoint_loc;  // contains address of where custom breakpoint is
 extern unsigned short custom_PC;  // check in loader if custom PC has been set, set in set_starting_adr.c
-extern unsigned short given_PC;  // PC which is read in S-Records
 
 // when a custom breakpoint is set an addr containing data/instr may be overwritten
 extern unsigned short data_overwritten_at_breakpoint;

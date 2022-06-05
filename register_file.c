@@ -3,7 +3,7 @@
 //
 #include "emulator.h"
 
-unsigned short regfile[2][16] = {0, 0, 0, 0, 0, 0, 0, 0, 0,
+union word_byte regfile[2][16] = {0, 0, 0, 0, 0, 0, 0, 0, 0,
                                  0, 0, 0, 0, 0, 0, 0,
                                  0, 1, 2, 4, 6, 16, 32, -1};
 
@@ -11,14 +11,14 @@ unsigned short regfile[2][16] = {0, 0, 0, 0, 0, 0, 0, 0, 0,
 // Print contents of register file, apart from constants
 void display_regfile()
 {
-    printf("R0: %04X   A0: %04X\n", regfile[0][0], regfile[0][8]);
-    printf("R1: %04X   A1: %04X\n", regfile[0][1], regfile[0][9]);
-    printf("R2: %04X   A2: %04X\n", regfile[0][2], regfile[0][10]);
-    printf("R3: %04X   A3: %04X\n", regfile[0][3], regfile[0][11]);
-    printf("R4: %04X   A4: %04X\n", regfile[0][4], regfile[0][12]);
-    printf("R5: %04X   A5: %04X\n", regfile[0][5], LR);  // regfile[0][13]
-    printf("R6: %04X   A6: %04X\n", regfile[0][6], SP);  // regfile[0][14]
-    printf("R7: %04X   A7: %04X\n", regfile[0][7], PC);  // regfile[0][15]
+    printf("R0: %04X   A0: %04X\n", regfile[0][0].word, regfile[0][8].word);
+    printf("R1: %04X   A1: %04X\n", regfile[0][1].word, regfile[0][9].word);
+    printf("R2: %04X   A2: %04X\n", regfile[0][2].word, regfile[0][10].word);
+    printf("R3: %04X   A3: %04X\n", regfile[0][3].word, regfile[0][11].word);
+    printf("R4: %04X   A4: %04X\n", regfile[0][4].word, regfile[0][12].word);
+    printf("R5: %04X   A5: %04X\n", regfile[0][5].word, LR);  // regfile[0][13]
+    printf("R6: %04X   A6: %04X\n", regfile[0][6].word, SP);  // regfile[0][14]
+    printf("R7: %04X   A7: %04X\n", regfile[0][7].word, PC);  // regfile[0][15]
 }
 
 
@@ -47,7 +47,7 @@ void modify_regfile()
     if (wb == 0)  // word
     {
         num.word = value;
-        regfile[0][reg_num] = num.word;
+        regfile[0][reg_num].word = num.word;
 
         // TODO: find nicer way to display reg_num?
         printf("Register %c%d set to 0x%X\n", reg_type, (reg_type == 'A')? reg_num - 8: reg_num, value);
