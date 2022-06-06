@@ -49,7 +49,7 @@ int main()
                 if (IR != 0)
                     printf("Sending to Decoder... %X\n", IR);
 
-                action = decode(PC, IR);
+                action = decode(IR);
             }
             // execute run from decode func
         }

@@ -1,12 +1,11 @@
 #include "emulator.h"
 
 
-int decode(unsigned short adr, unsigned short IR)
+int decode(unsigned short IR)
 {
-    unsigned short addr, inst;
+    unsigned short inst;
 
     inst = IR;
-    addr = adr;
 
     CPU_CLOCK++;
 
@@ -36,7 +35,7 @@ int decode(unsigned short adr, unsigned short IR)
         case 3:
             if (inst == BREAK_INSTRUCTION)
             {
-                printf("END\n");  // TODO: make sure this works
+                printf("END\n");
                 return END;
             }
             printf("Illegal instruction\n");
@@ -44,15 +43,7 @@ int decode(unsigned short adr, unsigned short IR)
 
         case 4:  // MOVL, MOVLZ
         case 5:  // MOVLS, MOVH
-            // looking at bits 12 and 13
-            if (MASK011(inst) == MOVL)
-                printf("MOVL   \n");
-            else if (MASK011(inst) == MOVLZ)
-                printf("MOVLZ  \n");
-            else if (MASK011(inst) == MOVLS)
-                printf("MOVLS  \n");
-            else  // == 3 MOVH
-                printf("MOVH   \n");
+            MOVx_instr(MOVx(inst), DRA(inst, BIT11), B(inst), DEST(inst));
 
             // print data and register
             printf("Data: #%02X Register: %d\n", BYTE011(inst), DABIT(inst) + DEST(inst));
@@ -71,6 +62,8 @@ int decode(unsigned short adr, unsigned short IR)
 void decode_BR_to_CLRCC(int inst)
 {
     printf("Decoding BR to CLRCC\n");
+    // TODO: finish this
+    // SWPB_instr(DEST(inst));
 }
 
 
@@ -87,27 +80,26 @@ void decode_SRA_to_SWAP(int inst)
             break;
 
         case ADD:
+            ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), 0, RC(inst), WB(inst));
             break;
 
         case ADDC:
+            ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), PSW.C, RC(inst), WB(inst));
             break;
 
         case SUB:
+            ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), 1, RC(inst), WB(inst));
             break;
 
         case SUBC:
+            ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), PSW.C, RC(inst), WB(inst));
             break;
 
         case CMP:
-            break;
-
         case XOR:
-            break;
-
         case AND:
-            break;
-
         case OR:
+            ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), 0, RC(inst), WB(inst));
             break;
 
         case BIT:
@@ -121,10 +113,12 @@ void decode_SRA_to_SWAP(int inst)
 
         case MOV:
         case MOV_SRA:
+            MOV_instr(SRA(inst, BIT8), DRA(inst, BIT7), WB(inst), SRC(inst), DEST(inst));
             break;
 
         case SWAP:
         case SWAP_SRA:
+            SWAP_instr(SRA(inst, BIT8), DRA(inst, BIT7), SRC(inst), DEST(inst));
             break;
     }
 }

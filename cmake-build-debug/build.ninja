@@ -115,6 +115,12 @@ build CMakeFiles/XMX_Emulator.dir/SignExtn.c.o: C_COMPILER__XMX_Emulator_Debug /
   OBJECT_DIR = CMakeFiles/XMX_Emulator.dir
   OBJECT_FILE_DIR = CMakeFiles/XMX_Emulator.dir
 
+build CMakeFiles/XMX_Emulator.dir/psw.c.o: C_COMPILER__XMX_Emulator_Debug /Users/mk/Desktop/XMX-Emulator/psw.c || cmake_object_order_depends_target_XMX_Emulator
+  DEP_FILE = CMakeFiles/XMX_Emulator.dir/psw.c.o.d
+  FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk -std=gnu99
+  OBJECT_DIR = CMakeFiles/XMX_Emulator.dir
+  OBJECT_FILE_DIR = CMakeFiles/XMX_Emulator.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target XMX_Emulator
@@ -123,7 +129,7 @@ build CMakeFiles/XMX_Emulator.dir/SignExtn.c.o: C_COMPILER__XMX_Emulator_Debug /
 #############################################
 # Link the executable XMX_Emulator
 
-build XMX_Emulator: C_EXECUTABLE_LINKER__XMX_Emulator_Debug CMakeFiles/XMX_Emulator.dir/main.c.o CMakeFiles/XMX_Emulator.dir/loader.c.o CMakeFiles/XMX_Emulator.dir/memory_dump.c.o CMakeFiles/XMX_Emulator.dir/bus.c.o CMakeFiles/XMX_Emulator.dir/fetch.c.o CMakeFiles/XMX_Emulator.dir/decoder.c.o CMakeFiles/XMX_Emulator.dir/set_breakpoint.c.o CMakeFiles/XMX_Emulator.dir/register_file.c.o CMakeFiles/XMX_Emulator.dir/set_PC.c.o CMakeFiles/XMX_Emulator.dir/execute.c.o CMakeFiles/XMX_Emulator.dir/SignExtn.c.o
+build XMX_Emulator: C_EXECUTABLE_LINKER__XMX_Emulator_Debug CMakeFiles/XMX_Emulator.dir/main.c.o CMakeFiles/XMX_Emulator.dir/loader.c.o CMakeFiles/XMX_Emulator.dir/memory_dump.c.o CMakeFiles/XMX_Emulator.dir/bus.c.o CMakeFiles/XMX_Emulator.dir/fetch.c.o CMakeFiles/XMX_Emulator.dir/decoder.c.o CMakeFiles/XMX_Emulator.dir/set_breakpoint.c.o CMakeFiles/XMX_Emulator.dir/register_file.c.o CMakeFiles/XMX_Emulator.dir/set_PC.c.o CMakeFiles/XMX_Emulator.dir/execute.c.o CMakeFiles/XMX_Emulator.dir/SignExtn.c.o CMakeFiles/XMX_Emulator.dir/psw.c.o
   FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk
   OBJECT_DIR = CMakeFiles/XMX_Emulator.dir
   POST_BUILD = :

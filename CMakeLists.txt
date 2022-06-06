@@ -14,5 +14,5 @@ add_executable(XMX_Emulator
         register_file.c
         set_PC.c
         execute.c
-        SignExtn.c)
-# psw.c execute.c
+        SignExtn.c
+        psw.c)

@@ -4,8 +4,8 @@
 #include "emulator.h"
 
 union word_byte regfile[2][16] = {0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                 0, 0, 0, 0, 0, 0, 0,
-                                 0, 1, 2, 4, 6, 16, 32, -1};
+                                              0, 0, 0, 0, 0, 0, 0,
+                                              0, 1, 2, 4, 6, 16, 32, -1};
 
 
 // Print contents of register file, apart from constants

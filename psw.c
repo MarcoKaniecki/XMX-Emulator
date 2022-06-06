@@ -4,6 +4,10 @@
 
 #include "emulator.h"
 
+unsigned carry[2][2][2] = {0,0,1,0,1,0,1,1};
+unsigned overflow[2][2][2] = {0,1,0,0,0,0,1,0};
+
+psw PSW;
 /*
  * Update the PSW bits (V, N, Z, C)
  * - using src, dst, and res values and whether word or byte

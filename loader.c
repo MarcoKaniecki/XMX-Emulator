@@ -19,7 +19,7 @@ int loader()
     unsigned int count, ahi, alo, byte;
     unsigned short address, final_addr;
 
-    infile = fopen("Lab1.xme", "r");
+    infile = fopen("Strings.xme", "r");
 
     while(fgets(srec, MAX_REC_LEN, infile) > 0)
     {
