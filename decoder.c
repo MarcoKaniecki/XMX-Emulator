@@ -44,7 +44,7 @@ int decode(unsigned short IR)
 
         case 4:  // MOVL, MOVLZ
         case 5:  // MOVLS, MOVH
-            MOVx_instr(MOVx(inst), DRA(inst, BIT11), B(inst), DEST(inst));
+            MOVx_instr(MOVx(inst), EXTR_DRA(inst, Bit11), B(inst), DEST(inst));
 
             // print data and register
             printf("Data: #%02X Register: %d\n", BYTE011(inst), DABIT(inst) + DEST(inst));
@@ -80,34 +80,34 @@ void decode_SRA_to_SWAP(int inst)
     switch (opcode_segment2)
     {
         case SRAorRRC:
-            SRAorRRC_instr(EXTR_BIT(inst, BIT7), WB(inst), DEST(inst));
+            SRAorRRC_instr(EXTR_BIT(inst, Bit7), EXTR_WB(inst), DEST(inst));
             break;
         case ADD:
-            ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), 0, RC(inst), WB(inst));
+            ADDtoOR_instr(opcode_segment2, EXTR_SC(inst), DEST(inst), 0, EXTR_RC(inst), EXTR_WB(inst));
             break;
         case ADDC:
-            ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), PSW.C, RC(inst), WB(inst));
+            ADDtoOR_instr(opcode_segment2, EXTR_SC(inst), DEST(inst), PSW.C, EXTR_RC(inst), EXTR_WB(inst));
             break;
         case SUB:
-            ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), 1, RC(inst), WB(inst));
+            ADDtoOR_instr(opcode_segment2, EXTR_SC(inst), DEST(inst), 1, EXTR_RC(inst), EXTR_WB(inst));
             break;
         case SUBC:
-            ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), PSW.C, RC(inst), WB(inst));
+            ADDtoOR_instr(opcode_segment2, EXTR_SC(inst), DEST(inst), PSW.C, EXTR_RC(inst), EXTR_WB(inst));
             break;
         case CMP:
         case XOR:
         case AND:
         case OR:
-            ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), 0, RC(inst), WB(inst));
+            ADDtoOR_instr(opcode_segment2, EXTR_SC(inst), DEST(inst), 0, EXTR_RC(inst), EXTR_WB(inst));
             break;
         case BIT:
-            BIx_instr(BIT, RC(inst), WB(inst), SC(inst), DEST(inst));
+            BIx_instr(BIT, EXTR_RC(inst), EXTR_WB(inst), EXTR_SC(inst), DEST(inst));
             break;
         case BIS:
-            BIx_instr(BIS, RC(inst), WB(inst), SC(inst), DEST(inst));
+            BIx_instr(BIS, EXTR_RC(inst), EXTR_WB(inst), EXTR_SC(inst), DEST(inst));
             break;
         case BIC:
-            BIx_instr(BIC, RC(inst), WB(inst), SC(inst), DEST(inst));
+            BIx_instr(BIC, EXTR_RC(inst), EXTR_WB(inst), EXTR_SC(inst), DEST(inst));
             break;
         case MOV:
         case MOV_SRA: // TODO: continuous loop issue
@@ -115,7 +115,7 @@ void decode_SRA_to_SWAP(int inst)
             break;
         case SWAP:
         case SWAP_SRA:
-            SWAP_instr(SRA(inst, BIT8), DRA(inst, BIT7), SRC(inst), DEST(inst));
+            SWAP_instr(EXTR_SRA(inst, Bit8), EXTR_DRA(inst, Bit7), SRC(inst), DEST(inst));
             break;
     }
 }
@@ -204,29 +204,24 @@ void decode_LDR_STR(int inst)
 {
     printf("Decoding LDR_STR\n");
 
-    int OFF = (inst >> 7) & 0x1F;  // signed 5 bit offset
-    unsigned int SDRA = (inst >> 12) & 1;  // either SRA or DRA
-    unsigned int WorB = (inst >> 6) & 1;  // 0 = word, 1 = byte
-    unsigned int SRCreg = (inst >> 3) & 0x07;
-    unsigned int DSTreg = inst & 0x07;
+    unsigned short OFF = (inst >> 7) & 0x1F;  // signed 5 bit offset
+    unsigned short SDRA = (inst >> 12) & 1;  // either SRA or DRA
+    unsigned short SRCreg = (inst >> 3) & 0x07;
+    unsigned short DSTreg = inst & 0x07;
 
-    // check if MSB is a 1, if yes then change to negative number
-    // 0x20 = 0x1F - 1 = 11111 - 1
-    OFF = (((OFF >> 4) & 1) == 1) ? OFF - 0x20 : OFF;
 
-    if (SDRA == 0)  // LDR
+    if (SDRA == LDR)
     {
         // SDRA is actually DRA
-        DSTreg = DSTreg | (SDRA << 3);  // addr or data
-        SRCreg = SRCreg | 0x08;  // forces register to be addr reg
-        printf("LDR");
+        printf("LDR\n");
+        LDR_STR_instr(LDR, SDRA, OFF, EXTR_WB(inst), SRCreg, DSTreg);
     }
     else  // STR
     {
         // SDRA is actually SRA
-        DSTreg = DSTreg | 0x08;  // forces register to be addr reg
-        SRCreg = SRCreg | (SDRA << 3);  // addr or data
-        printf("STR");
+        printf("ST\n");
+        LDR_STR_instr(STR, SDRA, OFF, EXTR_WB(inst), SRCreg, DSTreg);
+
     }
-    printf(".%c  SRCreg: %d  DSTreg: %d  Off: %d\n", (WorB == 0) ? 'W' : 'B', SRCreg, DSTreg, OFF);
+    // printf(".%c  SRCreg: %d  DSTreg: %d  Off: %d\n", (WorB == 0) ? 'W' : 'B', SRCreg, DSTreg, OFF);
 }

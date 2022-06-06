@@ -9,10 +9,7 @@ union word_byte srcnum, dstnum;
 void BL_instr(unsigned short OFF)
 {
     LR = PC;
-
     PC = PC + (sign_ext(OFF,BIT12) << 1);
-
-    // TODO: PC = LR ???
 }
 
 // unconditional branch
@@ -164,6 +161,7 @@ void SXT_instr(unsigned short DST)
 
 // SRA - shift DST data register right one bit arithmetic keeping sign
 // RRC - rotate DST data register right by 1
+// TODO: more comments
 void SRAorRRC_instr(enum SRAorRRC instr, enum SIZE bw, unsigned short DST)
 {
     union word_byte temp;
@@ -243,5 +241,48 @@ void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned s
             printf("invalid\n");
     }
 }
+
+// Load relative from SRC address register + offset to DST (data or address) register
+// Store relative from SRC (data or address) register to DST address register + offset
+void LDR_STR_instr(enum LDR_STR instr, unsigned short SDRA ,unsigned short OFF, enum SIZE bw, unsigned short SRC, unsigned short DST)
+{
+    unsigned short EA, mbr;
+    switch (instr)
+    {
+        case LDR:
+            // Address reg is the SRC reg for LDR
+            EA = (regfile[0][SRC].word | 0x08) + sign_ext(OFF, BIT4);
+            if (bw == word)
+            {
+                bus(EA, &mbr, read, word);
+                regfile[0][DST | (SDRA << 3)].word = mbr;
+            }
+            else  // byte
+            {
+                bus(EA, &mbr, read, byte);
+                regfile[0][DST | (SDRA << 3)].byte[0] = mbr;
+            }
+            break;
+        case STR:
+            // Address reg is the DST reg for STR
+            EA = (regfile[0][DST].word | 0x08) + sign_ext(OFF, BIT4);
+            if (bw == word)
+            {
+                mbr = regfile[0][SRC | (SDRA << 3)].word;
+                bus(EA, &mbr, write, word);
+            }
+            else  // byte
+            {
+                mbr = regfile[0][SRC | (SDRA << 3)].byte[0];
+                bus(EA, &mbr, write, byte);
+            }
+            break;
+        default:
+            printf("invalid\n");
+    }
+}
+
+
+
 
 

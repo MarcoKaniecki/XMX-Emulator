@@ -36,13 +36,13 @@ extern unsigned long CPU_CLOCK;
 // *********** USED IN DECODER ************
 #define EXTR_BIT(instr, loc) (((instr) >> (loc)) & 1)  // Extract a bit at a given location
 
-#define RC(x) (((x) >> 7) & 1)
-#define WB(x) (((x) >> 6) & 1)
-#define SC(x) (((x) >> 3) & 0x07)
+#define EXTR_RC(x) (((x) >> 7) & 1)
+#define EXTR_WB(x) (((x) >> 6) & 1)
+#define EXTR_SC(x) (((x) >> 3) & 0x07)
 #define DEST(x) ((x) & 0x07)  // D D D bits 0 to 2
 
-#define DRA(instr, loc) (((instr) >> (loc)) & 1)
-#define SRA(instr, loc) (((instr) >> (loc)) & 1)
+#define EXTR_DRA(instr, loc) (((instr) >> (loc)) & 1)
+#define EXTR_SRA(instr, loc) (((instr) >> (loc)) & 1)
 #define B(x) (((x) >> 3) & 0xFF)
 #define SRC(x) (((x) >> 3) & 0x07)
 
@@ -77,8 +77,10 @@ extern void decode_SRA_to_SWAP(int inst);
 enum ACTION { read, write };
 enum SIZE { byte, word };
 enum ADD_SUB { add, sub };
-enum BITS { BIT0, BIT1, BIT2, BIT3, BIT4, BIT5, BIT6, BIT7, BIT8, BIT9, BIT10, BIT11, BIT12, BIT13, BIT14, BIT15 };
-enum SRAorRRC {SRA, RRC};
+enum BITS { Bit0, Bit1, Bit2, Bit3, Bit4, Bit5, Bit6, Bit7, Bit8, Bit9, Bit10, Bit11, Bit12, Bit13, Bit14, Bit15 };
+enum SRAorRRC { SRA, RRC };
+enum LDR_STR { LDR, STR };
+enum LD_ST { LD, ST };
 
 
 typedef struct psw
@@ -149,7 +151,8 @@ extern void SWAP_instr(unsigned short SRA, unsigned short DRA, unsigned short SR
 extern void MOVx_instr(unsigned short instr, unsigned short DRA, unsigned short B, unsigned short DST);
 extern void MOV_instr(unsigned short SRA, unsigned short DRA, enum SIZE bw, unsigned short SRC, unsigned short DST);
 extern void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned short SC, unsigned short DST);
-
+extern void LDR_STR_instr(enum LDR_STR instr, unsigned short SDRA ,unsigned short OFF, enum SIZE bw, unsigned short SRC, unsigned short DST);
+extern void LD_ST_instr();
 
 
 // Functions provided by Dr. Hughes
