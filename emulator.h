@@ -34,6 +34,7 @@ extern unsigned long CPU_CLOCK;
 
 
 // *********** USED IN DECODER ************
+// EXTR means extract
 #define EXTR_BIT(instr, loc) (((instr) >> (loc)) & 1)  // Extract a bit at a given location
 
 #define EXTR_RC(x) (((x) >> 7) & 1)
@@ -44,8 +45,7 @@ extern unsigned long CPU_CLOCK;
 #define EXTR_DRA(instr, loc) (((instr) >> (loc)) & 1)
 #define EXTR_SRA(instr, loc) (((instr) >> (loc)) & 1)
 #define B(x) (((x) >> 3) & 0xFF)
-#define SRC(x) (((x) >> 3) & 0x07)
-
+#define EXTR_SRC(x) (((x) >> 3) & 0x07)
 
 
 #define MSB3(x) (((x) >> 13) & 0x07)
@@ -81,6 +81,7 @@ enum BITS { Bit0, Bit1, Bit2, Bit3, Bit4, Bit5, Bit6, Bit7, Bit8, Bit9, Bit10, B
 enum SRAorRRC { SRA, RRC };
 enum LDR_STR { LDR, STR };
 enum LD_ST { LD, ST };
+enum LD_ST_ADDRESSING {direct, indexed};
 
 
 typedef struct psw
@@ -152,7 +153,8 @@ extern void MOVx_instr(unsigned short instr, unsigned short DRA, unsigned short 
 extern void MOV_instr(unsigned short SRA, unsigned short DRA, enum SIZE bw, unsigned short SRC, unsigned short DST);
 extern void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned short SC, unsigned short DST);
 extern void LDR_STR_instr(enum LDR_STR instr, unsigned short SDRA ,unsigned short OFF, enum SIZE bw, unsigned short SRC, unsigned short DST);
-extern void LD_ST_instr();
+extern void LD_instr(unsigned short DI, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short ADR, unsigned short DST);
+extern void ST_instr(unsigned short DI, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short SRC, unsigned short ADR);
 
 
 // Functions provided by Dr. Hughes

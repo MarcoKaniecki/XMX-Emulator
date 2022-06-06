@@ -115,7 +115,7 @@ void decode_SRA_to_SWAP(int inst)
             break;
         case SWAP:
         case SWAP_SRA:
-            SWAP_instr(EXTR_SRA(inst, Bit8), EXTR_DRA(inst, Bit7), SRC(inst), DEST(inst));
+            SWAP_instr(EXTR_SRA(inst, Bit8), EXTR_DRA(inst, Bit7), EXTR_SRC(inst), DEST(inst));
             break;
     }
 }
@@ -126,16 +126,15 @@ void decode_LD_ST(int inst)
 {
     printf("Decoding LD_ST\n");
 
-    int LDorST = (inst >> 11) & 1; // 0 = LD, 1 = ST
-    int DI = (inst >> 10) & 1;  // direct or indexed addressing
-    int WorB = (inst >> 6) & 1;  // 0 = word, 1 = byte
-    int SRCreg = (inst >> 3) & 0x07;
-    int DSTreg = inst & 0x07;
-    int SDRA = (inst >> 9) & 1;  // either SRA or DRA
+    unsigned short LDorST = (inst >> 11) & 1; // 0 = LD, 1 = ST
+    unsigned short DI = (inst >> 10) & 1;  // direct or indexed addressing
+    unsigned short WorB = (inst >> 6) & 1;  // 0 = word, 1 = byte
+    unsigned short SRCreg = (inst >> 3) & 0x07;
+    unsigned short DSTreg = inst & 0x07;
+    unsigned short SDRA = (inst >> 9) & 1;  // either SRA or DRA
+    unsigned short PRPO = (inst >> 8) & 1;  // Pre- or Post- increment (0) or decrement (1)
+    unsigned short ID = (inst >> 7) & 1;  // Increment (+) or decrement (-), stored as 0 or 1 respectively
 
-    // bit 8: Pre- or Post- increment (0) or decrement (1)
-    // bit 7: Increment (+) or decrement (-), stored as 0 or 1 respectively
-    int addr_modifier = (inst >> 7) & 0x03;
 
     if (DI == 0)  // direct addressing
     {
@@ -152,24 +151,7 @@ void decode_LD_ST(int inst)
         SRCreg = SRCreg | 0x08;  // forces register to be addr reg
         printf("LD.%c ", (WorB == 0) ? 'W' : 'B');
 
-        // detailed table on addr modifiers in XMX Design Document p.19
-        printf("SRCreg: ");
-        switch (addr_modifier)
-        {
-            case 0:  // pre-increment
-                printf("+%d ", SRCreg);
-                break;
-            case 1:  // pre-decrement
-                printf("-%d ", SRCreg);
-                break;
-            case 2:  // post-increment
-                printf("%d+ ", SRCreg);
-                break;
-            case 3:  // post-decrement
-                printf("%d- ", SRCreg);
-                break;
-        }
-        printf("DSTreg: %d\n", DSTreg);
+        LD_instr(DI, PRPO, ID, WorB, SRCreg, DSTreg);
     }
     else  // ST
     {
@@ -178,23 +160,7 @@ void decode_LD_ST(int inst)
         SRCreg = SRCreg | (SDRA << 3);  // addr or data
         printf("ST.%c SRCreg: %d  ", (WorB == 0) ? 'W' : 'B', SRCreg);
 
-        printf("DSTreg: ");
-        switch (addr_modifier)
-        {
-            case 0:  // pre-increment
-                printf("+%d", DSTreg);
-                break;
-            case 1:  // pre-decrement
-                printf("-%d", DSTreg);
-                break;
-            case 2:  // post-increment
-                printf("%d+", DSTreg);
-                break;
-            case 3:  // post-decrement
-                printf("%d-", DSTreg);
-                break;
-        }
-        printf("\n");
+        ST_instr(DI, PRPO, ID, WorB, SRCreg, DSTreg);
     }
 }
 
@@ -206,21 +172,19 @@ void decode_LDR_STR(int inst)
 
     unsigned short OFF = (inst >> 7) & 0x1F;  // signed 5 bit offset
     unsigned short SDRA = (inst >> 12) & 1;  // either SRA or DRA
-    unsigned short SRCreg = (inst >> 3) & 0x07;
-    unsigned short DSTreg = inst & 0x07;
 
 
     if (SDRA == LDR)
     {
         // SDRA is actually DRA
         printf("LDR\n");
-        LDR_STR_instr(LDR, SDRA, OFF, EXTR_WB(inst), SRCreg, DSTreg);
+        LDR_STR_instr(LDR, SDRA, OFF, EXTR_WB(inst), EXTR_SRC(inst), DEST(inst));
     }
     else  // STR
     {
         // SDRA is actually SRA
         printf("ST\n");
-        LDR_STR_instr(STR, SDRA, OFF, EXTR_WB(inst), SRCreg, DSTreg);
+        LDR_STR_instr(STR, SDRA, OFF, EXTR_WB(inst), EXTR_SRC(inst), DEST(inst));
 
     }
     // printf(".%c  SRCreg: %d  DSTreg: %d  Off: %d\n", (WorB == 0) ? 'W' : 'B', SRCreg, DSTreg, OFF);

@@ -9,13 +9,13 @@ union word_byte srcnum, dstnum;
 void BL_instr(unsigned short OFF)
 {
     LR = PC;
-    PC = PC + (sign_ext(OFF,BIT12) << 1);
+    PC = PC + (sign_ext(OFF,Bit12) << 1);
 }
 
 // unconditional branch
 void BR_instr(unsigned short OFF)
 {
-    PC = PC + (sign_ext(OFF, BIT9) << 1);
+    PC = PC + (sign_ext(OFF, Bit9) << 1);
 }
 
 // swap bytes in DST data register
@@ -131,7 +131,7 @@ void MOVx_instr(unsigned short instr, unsigned short DRA, unsigned short B, unsi
             regfile[0][DST_reg].byte[1] = 0xFF;
             break;
         case MOVH:
-            regfile[0][DST_reg].byte[1] = 0xFF;
+            regfile[0][DST_reg].byte[1] = B;
             break;
         default:
             printf("invalid instr\n");
@@ -156,7 +156,7 @@ void MOV_instr(unsigned short SRA, unsigned short DRA, enum SIZE bw, unsigned sh
 // Sign extend MSBit in LSByte of DST data register
 void SXT_instr(unsigned short DST)
 {
-    regfile[0][DST].byte[0] = sign_ext(regfile[0][DST].byte[0], BIT7);
+    regfile[0][DST].byte[0] = sign_ext(regfile[0][DST].byte[0], Bit7);
 }
 
 // SRA - shift DST data register right one bit arithmetic keeping sign
@@ -168,22 +168,22 @@ void SRAorRRC_instr(enum SRAorRRC instr, enum SIZE bw, unsigned short DST)
 
     if (instr == SRA)
     {
-        PSW.C = EXTR_BIT(regfile[0][DST].word, BIT0);
+        PSW.C = EXTR_BIT(regfile[0][DST].word, Bit0);
         if (bw == word)
         {
-            temp.word = EXTR_BIT(regfile[0][DST].word, BIT15);
+            temp.word = EXTR_BIT(regfile[0][DST].word, Bit15);
             regfile[0][DST].word = (regfile[0][DST].word >> 1) | (temp.word << 15);
         }
         else
         {
-            temp.byte[0] = EXTR_BIT(regfile[0][DST].byte[0], BIT7);
+            temp.byte[0] = EXTR_BIT(regfile[0][DST].byte[0], Bit7);
             regfile[0][DST].byte[0] = (regfile[0][DST].byte[0] >> 1) | (temp.byte[0] << 7);
         }
     }
     else  // RRC
     {
         temp.word = PSW.C;
-        PSW.C = EXTR_BIT(regfile[0][DST].word, BIT0);
+        PSW.C = EXTR_BIT(regfile[0][DST].word, Bit0);
         if (bw == word)
         {
             regfile[0][DST].word = (regfile[0][DST].word >> 1) | (temp.word << 15);
@@ -251,7 +251,7 @@ void LDR_STR_instr(enum LDR_STR instr, unsigned short SDRA ,unsigned short OFF, 
     {
         case LDR:
             // Address reg is the SRC reg for LDR
-            EA = (regfile[0][SRC].word | 0x08) + sign_ext(OFF, BIT4);
+            EA = (regfile[0][SRC].word | 0x08) + sign_ext(OFF, Bit4);
             if (bw == word)
             {
                 bus(EA, &mbr, read, word);
@@ -265,7 +265,7 @@ void LDR_STR_instr(enum LDR_STR instr, unsigned short SDRA ,unsigned short OFF, 
             break;
         case STR:
             // Address reg is the DST reg for STR
-            EA = (regfile[0][DST].word | 0x08) + sign_ext(OFF, BIT4);
+            EA = (regfile[0][DST].word | 0x08) + sign_ext(OFF, Bit4);
             if (bw == word)
             {
                 mbr = regfile[0][SRC | (SDRA << 3)].word;
@@ -282,7 +282,108 @@ void LDR_STR_instr(enum LDR_STR instr, unsigned short SDRA ,unsigned short OFF, 
     }
 }
 
+// Load from SRC address register to DST (data or address) register
+void LD_instr(unsigned short DI, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short ADR, unsigned short DST)
+{
+    unsigned short EA, mbr;
 
+    // ADR is already set to addressing register
+    // DST is already set to be data or addressing register
 
+    // Effective address pre increment
+    if (DI == direct)
+    {
+        EA = regfile[0][ADR].word;
+    }
+    else  // indexed
+    {
+        if (PRPO == 0)  // pre increment/decrement
+        {
+            if (ID == 0)  // increment
+            {
+                regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word + 2 : regfile[0][ADR].byte[0] + 1;
+            }
+            else  // decrement
+            {
+                regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word - 2 : regfile[0][ADR].byte[0] - 1;
+            }
+        }
+        EA = regfile[0][ADR].word;
+    }
 
+    if (bw == word)
+    {
+        bus(EA, &mbr, read, word);
+        regfile[0][DST].word = mbr;
+    }
+    else  // byte
+    {
+        bus(EA, &mbr, read, byte);
+        regfile[0][DST].byte[0] = mbr;
+    }
 
+    if (DI == 1 && PRPO == 1)  // indexed post incr/decr
+    {
+        if (ID == 0)  // increment
+        {
+            regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word + 2 : regfile[0][ADR].byte[0] + 1;
+        }
+        else  // decrement
+        {
+            regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word - 2 : regfile[0][ADR].byte[0] - 1;
+        }
+    }
+}
+
+// Store from SRC (data or address) register to DST address register
+void ST_instr(unsigned short DI, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short SRC, unsigned short ADR)
+{
+    unsigned short EA, mbr;
+
+    // SRC is already set to be data or addressing register
+    // ADR is already set to addressing register
+
+    // Effective address pre increment
+    if (DI == direct)
+    {
+        EA = regfile[0][ADR].word;
+    }
+    else  // indexed
+    {
+        if (PRPO == 0)  // pre increment/decrement
+        {
+            if (ID == 0)  // increment
+            {
+                regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word + 2 : regfile[0][ADR].byte[0] + 1;
+            }
+            else  // decrement
+            {
+                regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word - 2 : regfile[0][ADR].byte[0] - 1;
+            }
+        }
+        EA = regfile[0][ADR].word;
+    }
+
+    if (bw == word)
+    {
+        mbr = regfile[0][SRC].word;
+        bus(EA, &mbr, write, word);
+    }
+    else  // byte
+    {
+        mbr = regfile[0][SRC].byte[0];
+        bus(EA, &mbr, write, byte);
+    }
+
+    if (DI == 1 && PRPO == 1)  // indexed post incr/decr
+    {
+        if (ID == 0)  // increment
+        {
+            regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word + 2 : regfile[0][ADR].byte[0] + 1;
+        }
+        else  // decrement
+        {
+            regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word - 2 : regfile[0][ADR].byte[0] - 1;
+        }
+    }
+}
