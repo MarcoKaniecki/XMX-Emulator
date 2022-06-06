@@ -62,11 +62,31 @@ int decode(unsigned short IR)
 // any instruction between and including BR and CLRCC get further processed here
 void decode_BR_to_CLRCC(int inst)
 {
-    printf("Decoding BR to CLRCC\n");
-    // TODO: finish decoding this
-    // BR_instr(BR_OFF(inst));
-    // SWPB_instr(DEST(inst));
-    // SXT_instr(DEST(inst));
+    unsigned short Mask11_10 = (inst >> 10) & 0x03;
+    unsigned short Mask3 = EXTR_BIT(inst, Bit3);
+
+    switch (Mask11_10)
+    {
+        case 0:  // BR
+            BR_instr(BR_OFF(inst));
+            break;
+        case 1:  // CEX
+            // TODO: yet to implement
+            printf("CEX\n");
+            break;
+        case 2:  // SWPB or SXT
+            if (Mask3 == 0)  // SWPB
+            {
+                SWPB_instr(DEST(inst));
+            }
+            else  // SXT
+            {
+                SXT_instr(DEST(inst));
+            }
+            break;
+        default:
+            printf("invalid\n");
+    }
 }
 
 
@@ -111,7 +131,7 @@ void decode_SRA_to_SWAP(int inst)
             break;
         case MOV:
         case MOV_SRA: // TODO: continuous loop issue
-            // MOV_instr(SRA(inst, BIT8), DRA(inst, BIT7), WB(inst), SRC(inst), DEST(inst));
+            MOV_instr(EXTR_SRA(inst, Bit8), EXTR_DRA(inst, Bit7), EXTR_WB(inst), EXTR_SRC(inst), DEST(inst));
             break;
         case SWAP:
         case SWAP_SRA:

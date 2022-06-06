@@ -34,9 +34,11 @@ extern unsigned long CPU_CLOCK;
 
 
 // *********** USED IN DECODER ************
+
 // EXTR means extract
 #define EXTR_BIT(instr, loc) (((instr) >> (loc)) & 1)  // Extract a bit at a given location
 
+// extract operand stuff
 #define EXTR_RC(x) (((x) >> 7) & 1)
 #define EXTR_WB(x) (((x) >> 6) & 1)
 #define EXTR_SC(x) (((x) >> 3) & 0x07)
@@ -47,10 +49,10 @@ extern unsigned long CPU_CLOCK;
 #define B(x) (((x) >> 3) & 0xFF)
 #define EXTR_SRC(x) (((x) >> 3) & 0x07)
 
-
+// extract opcode stuff
 #define MSB3(x) (((x) >> 13) & 0x07)
 #define BL_OFF(x) ((x) & 0x1FFF)  // BL
-#define BR_OFF(x) ((x) & 0x3FF);
+#define BR_OFF(x) ((x) & 0x3FF)
 
 
 #define MASK001X(x) (((x) >> 12) & 1)
