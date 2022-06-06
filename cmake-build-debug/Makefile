@@ -321,6 +321,30 @@ memory_dump.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/memory_dump.c.s
 .PHONY : memory_dump.c.s
 
+psw.o: psw.c.o
+.PHONY : psw.o
+
+# target to build an object file
+psw.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/psw.c.o
+.PHONY : psw.c.o
+
+psw.i: psw.c.i
+.PHONY : psw.i
+
+# target to preprocess a source file
+psw.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/psw.c.i
+.PHONY : psw.c.i
+
+psw.s: psw.c.s
+.PHONY : psw.s
+
+# target to generate assembly for a file
+psw.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/psw.c.s
+.PHONY : psw.c.s
+
 register_file.o: register_file.c.o
 .PHONY : register_file.o
 
@@ -426,6 +450,9 @@ help:
 	@echo "... memory_dump.o"
 	@echo "... memory_dump.i"
 	@echo "... memory_dump.s"
+	@echo "... psw.o"
+	@echo "... psw.i"
+	@echo "... psw.s"
 	@echo "... register_file.o"
 	@echo "... register_file.i"
 	@echo "... register_file.s"

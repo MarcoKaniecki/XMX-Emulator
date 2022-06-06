@@ -34,9 +34,9 @@ extern unsigned long CPU_CLOCK;
 
 
 // *********** USED IN DECODER ************
-#define EXTR_BIT(instr, loc) (((instr) >> (loc)) & 1)
+#define EXTR_BIT(instr, loc) (((instr) >> (loc)) & 1)  // Extract a bit at a given location
 
-#define RC(x) (((x) >> 7) & 1)  // TODO: add to something instr
+#define RC(x) (((x) >> 7) & 1)
 #define WB(x) (((x) >> 6) & 1)
 #define SC(x) (((x) >> 3) & 0x07)
 #define DEST(x) ((x) & 0x07)  // D D D bits 0 to 2
@@ -50,6 +50,7 @@ extern unsigned long CPU_CLOCK;
 
 #define MSB3(x) (((x) >> 13) & 0x07)
 #define BL_OFF(x) ((x) & 0x1FFF)  // BL
+#define BR_OFF(x) ((x) & 0x3FF);
 
 
 #define MASK001X(x) (((x) >> 12) & 1)
@@ -138,6 +139,8 @@ extern void update_psw(unsigned short src, unsigned short dst, unsigned short re
 
 
 // execute functions
+extern void BL_instr(unsigned short OFF);
+extern void BR_instr(unsigned short OFF);
 extern void SWPB_instr(unsigned short DST);
 extern void SXT_instr(unsigned short DST);
 extern void SRAorRRC_instr(enum SRAorRRC instr, enum SIZE bw, unsigned short DST);

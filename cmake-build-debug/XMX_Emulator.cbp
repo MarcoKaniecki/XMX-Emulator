@@ -105,6 +105,9 @@
 		<Unit filename="/Users/marcokaniecki/Desktop/XMX-Emulator/memory_dump.c">
 			<Option target="XMX_Emulator"/>
 		</Unit>
+		<Unit filename="/Users/marcokaniecki/Desktop/XMX-Emulator/psw.c">
+			<Option target="XMX_Emulator"/>
+		</Unit>
 		<Unit filename="/Users/marcokaniecki/Desktop/XMX-Emulator/register_file.c">
 			<Option target="XMX_Emulator"/>
 		</Unit>

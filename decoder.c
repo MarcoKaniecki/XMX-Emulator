@@ -16,8 +16,9 @@ int decode(unsigned short IR)
     switch (MSB3(inst))
     {
         case 0:  // BL
-            if (BL_OFF(inst) == 0)
-                break;
+            // if (BL_OFF(inst) == 0)
+            //    break;
+            BL_instr(BL_OFF(inst));
             printf("BL     OFF:  #%04X\n", BL_OFF(inst));
             break;
 
@@ -62,7 +63,8 @@ int decode(unsigned short IR)
 void decode_BR_to_CLRCC(int inst)
 {
     printf("Decoding BR to CLRCC\n");
-    // TODO: finish this
+    // TODO: finish decoding this
+    // BR_instr(BR_OFF(inst));
     // SWPB_instr(DEST(inst));
     // SXT_instr(DEST(inst));
 }
