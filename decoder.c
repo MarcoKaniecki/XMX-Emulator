@@ -64,6 +64,7 @@ void decode_BR_to_CLRCC(int inst)
     printf("Decoding BR to CLRCC\n");
     // TODO: finish this
     // SWPB_instr(DEST(inst));
+    // SXT_instr(DEST(inst));
 }
 
 
@@ -77,45 +78,39 @@ void decode_SRA_to_SWAP(int inst)
     switch (opcode_segment2)
     {
         case SRAorRRC:
+            SRAorRRC_instr(EXTR_BIT(inst, BIT7), WB(inst), DEST(inst));
             break;
-
         case ADD:
             ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), 0, RC(inst), WB(inst));
             break;
-
         case ADDC:
             ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), PSW.C, RC(inst), WB(inst));
             break;
-
         case SUB:
             ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), 1, RC(inst), WB(inst));
             break;
-
         case SUBC:
             ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), PSW.C, RC(inst), WB(inst));
             break;
-
         case CMP:
         case XOR:
         case AND:
         case OR:
             ADDtoOR_instr(opcode_segment2, SC(inst), DEST(inst), 0, RC(inst), WB(inst));
             break;
-
         case BIT:
+            BIx_instr(BIT, RC(inst), WB(inst), SC(inst), DEST(inst));
             break;
-
         case BIS:
+            BIx_instr(BIS, RC(inst), WB(inst), SC(inst), DEST(inst));
             break;
-
         case BIC:
+            BIx_instr(BIC, RC(inst), WB(inst), SC(inst), DEST(inst));
             break;
-
         case MOV:
-        case MOV_SRA:
-            MOV_instr(SRA(inst, BIT8), DRA(inst, BIT7), WB(inst), SRC(inst), DEST(inst));
+        case MOV_SRA: // TODO: continuous loop issue
+            // MOV_instr(SRA(inst, BIT8), DRA(inst, BIT7), WB(inst), SRC(inst), DEST(inst));
             break;
-
         case SWAP:
         case SWAP_SRA:
             SWAP_instr(SRA(inst, BIT8), DRA(inst, BIT7), SRC(inst), DEST(inst));

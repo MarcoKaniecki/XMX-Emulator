@@ -77,6 +77,7 @@ enum ACTION { read, write };
 enum SIZE { byte, word };
 enum ADD_SUB { add, sub };
 enum BITS { BIT0, BIT1, BIT2, BIT3, BIT4, BIT5, BIT6, BIT7, BIT8, BIT9, BIT10, BIT11, BIT12, BIT13, BIT14, BIT15 };
+enum SRAorRRC {SRA, RRC};
 
 
 typedef struct psw
@@ -138,16 +139,18 @@ extern void update_psw(unsigned short src, unsigned short dst, unsigned short re
 
 // execute functions
 extern void SWPB_instr(unsigned short DST);
+extern void SXT_instr(unsigned short DST);
+extern void SRAorRRC_instr(enum SRAorRRC instr, enum SIZE bw, unsigned short DST);
 extern void ADDtoOR_instr(unsigned short instr, unsigned short SRC, unsigned short DST, unsigned short carry, unsigned short RC, enum SIZE bw);
 extern void SWAP_instr(unsigned short SRA, unsigned short DRA, unsigned short SRC, unsigned short DST);
 extern void MOVx_instr(unsigned short instr, unsigned short DRA, unsigned short B, unsigned short DST);
 extern void MOV_instr(unsigned short SRA, unsigned short DRA, enum SIZE bw, unsigned short SRC, unsigned short DST);
-
+extern void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned short SC, unsigned short DST);
 
 
 
 // Functions provided by Dr. Hughes
-unsigned short sign_ext(unsigned short offset, unsigned short signbit);
-unsigned short extract_bits(unsigned short value, unsigned short signbit);
+extern unsigned short sign_ext(unsigned short offset, unsigned short signbit);
+extern unsigned short extract_bits(unsigned short value, unsigned short signbit);
 
 #endif //XMX_EMULATOR_EMULATOR_H

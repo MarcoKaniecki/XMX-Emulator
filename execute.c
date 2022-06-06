@@ -138,5 +138,72 @@ void MOV_instr(unsigned short SRA, unsigned short DRA, enum SIZE bw, unsigned sh
 }
 
 
+void SXT_instr(unsigned short DST)
+{
+    regfile[0][DST].byte[0] = sign_ext(regfile[0][DST].byte[0], BIT7);
+}
+
+
+void SRAorRRC_instr(enum SRAorRRC instr, enum SIZE bw, unsigned short DST)
+{
+    union word_byte temp;
+
+    if (instr == SRA)
+    {
+        PSW.C = EXTR_BIT(regfile[0][DST].word, BIT0);
+        if (bw == word)
+        {
+            temp.word = EXTR_BIT(regfile[0][DST].word, BIT15);
+            regfile[0][DST].word = (regfile[0][DST].word >> 1) | (temp.word << 15);
+        }
+        else
+        {
+            temp.byte[0] = EXTR_BIT(regfile[0][DST].byte[0], BIT7);
+            regfile[0][DST].byte[0] = (regfile[0][DST].byte[0] >> 1) | (temp.byte[0] << 7);
+        }
+    }
+    else  // RRC
+    {
+        temp.word = PSW.C;
+        PSW.C = EXTR_BIT(regfile[0][DST].word, BIT0);
+        if (bw == word)
+        {
+            regfile[0][DST].word = (regfile[0][DST].word >> 1) | (temp.word << 15);
+        }
+        else
+        {
+            regfile[0][DST].byte[0] = (regfile[0][DST].byte[0] >> 1) | (temp.byte[0] << 7);
+        }
+    }
+}
+
+
+void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned short SC, unsigned short DST)
+{
+    union word_byte temp = regfile[RC][SC];
+    switch (instr)
+    {
+        case BIT:
+            if (bw == word)
+            {
+                PSW.Z = (temp.word == 0)? 1 : 0;
+            }
+            else
+            {
+                PSW.Z = (temp.byte[0] == 0)? 1 : 0;
+            }
+            break;
+        case BIS:
+            if (bw == word)
+            {
+                // regfile[0][DST].word = regfile[0][DST].word & (1 << )
+            }
+            break;
+        case BIC:
+            break;
+        default:
+            printf("invalid\n");
+    }
+}
 
 
