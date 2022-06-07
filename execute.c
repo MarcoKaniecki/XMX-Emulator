@@ -11,11 +11,11 @@ void execute(INSTRUCTIONS inst, unsigned short full_inst)
     {
         case BL_i:
             if (BL_OFF(full_inst) != 0)
-                printf("BL\n");
+                printf("BL OFF: %X\n", BL_OFF(full_inst));
             BL_instr(BL_OFF(full_inst));
             break;
         case BR_i:
-            printf("BR OFF: %04X\n", BR_OFF(full_inst));
+            printf("BR OFF: %X\n", BR_OFF(full_inst));
             BR_instr(BR_OFF(full_inst));
             break;
         case CEX_i:
@@ -102,11 +102,11 @@ void execute(INSTRUCTIONS inst, unsigned short full_inst)
             break;
         case LDR_i:
             printf("LDR\n");
-            LDR_STR_instr(LDR, EXTR_BIT(full_inst, Bit12), LDR_STR_OFF(full_inst), EXTR_WB(full_inst), EXTR_SRC(full_inst), DEST(full_inst));
+            LDR_STR_instr(0, EXTR_BIT(full_inst, Bit12), LDR_STR_OFF(full_inst), EXTR_WB(full_inst), EXTR_SRC(full_inst), DEST(full_inst));
             break;
         case STR_i:
             printf("STR\n");
-            LDR_STR_instr(STR, EXTR_BIT(full_inst, Bit12), LDR_STR_OFF(full_inst), EXTR_WB(full_inst), EXTR_SRC(full_inst), DEST(full_inst));
+            LDR_STR_instr(1, EXTR_BIT(full_inst, Bit12), LDR_STR_OFF(full_inst), EXTR_WB(full_inst), EXTR_SRC(full_inst), DEST(full_inst));
             break;
         default:
             printf("invalid\n");
@@ -119,6 +119,7 @@ void BL_instr(unsigned short OFF)
 {
     LR = PC;
     PC = PC + (sign_ext(OFF,Bit12) << 1);
+    printf("sign ext offset: %d, %x\n", sign_ext(OFF,Bit12) << 1, sign_ext(OFF,Bit12) << 1);
 }
 
 // unconditional branch
@@ -152,28 +153,33 @@ void ADDtoOR_instr(unsigned short instr, unsigned short SRC, unsigned short DST,
             case ADD:
             case ADDC:
                 result.word = dstnum.word + srcnum.word + c;
+                update_psw(srcnum.word, dstnum.word, result.word, word);
                 break;
             case SUB:
             case SUBC:
                 result.word = dstnum.word + ~srcnum.word + c;
+                update_psw(~srcnum.word, dstnum.word, result.word, word);
                 break;
             case CMP:
                 result.word = dstnum.word + ~srcnum.word + 1;
+                update_psw(~srcnum.word, dstnum.word, result.word, word);
                 break;
             case XOR:
                 result.word = dstnum.word ^ srcnum.word;
+                update_psw(srcnum.word, dstnum.word, result.word, word);
                 break;
             case AND:
                 result.word = dstnum.word & srcnum.word;
+                update_psw(srcnum.word, dstnum.word, result.word, word);
                 break;
             case OR:
                 result.word = dstnum.word | srcnum.word;
+                update_psw(srcnum.word, dstnum.word, result.word, word);
                 break;
             default:
                 printf("invalid\n");
         }
         // all instr update the psw however only CMP does not overwrite the DST register
-        update_psw(srcnum.word, dstnum.word, result.word, word);
         if (instr != CMP)
             regfile[0][DST].word = result.word;
     }
@@ -184,27 +190,32 @@ void ADDtoOR_instr(unsigned short instr, unsigned short SRC, unsigned short DST,
             case ADD:
             case ADDC:
                 result.byte[0] = dstnum.byte[0] + srcnum.byte[0] + c;
+                update_psw(srcnum.byte[0], dstnum.byte[0], result.byte[0], byte);
                 break;
             case SUB:
             case SUBC:
                 result.byte[0] = dstnum.byte[0] + ~srcnum.byte[0] + c;
+                update_psw(~srcnum.byte[0], dstnum.byte[0], result.byte[0], byte);
                 break;
             case CMP:
                 result.byte[0] = dstnum.byte[0] + ~srcnum.byte[0] + 1;
+                update_psw(~srcnum.byte[0], dstnum.byte[0], result.byte[0], byte);
                 break;
             case XOR:
                 result.byte[0] = dstnum.byte[0] ^ srcnum.byte[0];
+                update_psw(srcnum.byte[0], dstnum.byte[0], result.byte[0], byte);
                 break;
             case AND:
                 result.byte[0] = dstnum.byte[0] & srcnum.byte[0];
+                update_psw(srcnum.byte[0], dstnum.byte[0], result.byte[0], byte);
                 break;
             case OR:
                 result.byte[0] = dstnum.byte[0] | srcnum.byte[0];
+                update_psw(srcnum.byte[0], dstnum.byte[0], result.byte[0], byte);
                 break;
             default:
                 printf("invalid\n");
         }
-        update_psw(srcnum.byte[0], dstnum.byte[0], result.byte[0], byte);
         if (instr != CMP){
             regfile[0][DST].byte[0] = result.byte[0];
         }
@@ -360,17 +371,21 @@ void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned s
 
 // Load relative from SRC address register + offset to DST (data or address) register
 // Store relative from SRC (data or address) register to DST address register + offset
-void LDR_STR_instr(enum LDR_STR instr, unsigned short SDRA ,unsigned short OFF, enum SIZE bw, unsigned short SRC, unsigned short DST)
+void LDR_STR_instr(unsigned short instr, unsigned short SDRA ,unsigned short OFF, enum SIZE bw, unsigned short SRC, unsigned short DST)
 {
     unsigned short EA, mbr;
     switch (instr)
     {
-        case LDR:
+        case 0: // LDR
+            printf("LDR \n");
             // Address reg is the SRC reg for LDR
-            EA = (regfile[0][SRC].word | 0x08) + sign_ext(OFF, Bit4);
+            EA = (regfile[0][SRC | 0x08].word) + sign_ext(OFF, Bit4);
+            printf("sign ext: %d\n", sign_ext(OFF, Bit4));
             if (bw == word)
             {
+                printf("LDR word at addr: %X\n", EA);
                 bus(EA, &mbr, read, word);
+                printf("into reg: %d\n", (DST | (SDRA << 3)));
                 regfile[0][DST | (SDRA << 3)].word = mbr;
             }
             else  // byte
@@ -379,9 +394,10 @@ void LDR_STR_instr(enum LDR_STR instr, unsigned short SDRA ,unsigned short OFF, 
                 regfile[0][DST | (SDRA << 3)].byte[0] = mbr;
             }
             break;
-        case STR:
+        case 1: // STR
+            printf("STR\n");
             // Address reg is the DST reg for STR
-            EA = (regfile[0][DST].word | 0x08) + sign_ext(OFF, Bit4);
+            EA = (regfile[0][DST | 0x08].word) + sign_ext(OFF, Bit4);
             if (bw == word)
             {
                 mbr = regfile[0][SRC | (SDRA << 3)].word;

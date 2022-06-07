@@ -83,7 +83,7 @@ enum SRAorRRC { SRA, RRC };
 enum LDR_STR { LDR, STR };
 enum LD_ST_ADDRESSING {direct, indexed};
 typedef enum INSTRUCTIONS { BL_i, BR_i, CEX_i, SWPB_i, SXT_i, SRAorRRC_i, ADD_i, ADDC_i, SUB_i, SUBC_i, CMP_i, XOR_i, AND_i, OR_i,
-        BIT_i, BIS_i, BIC_i, MOV_i, SWAP_i, LD_i, ST_i, MOVx_i, LDR_i, STR_i } INSTRUCTIONS;
+        BIT_i, BIS_i, BIC_i, MOV_i, SWAP_i, LD_i, ST_i, MOVx_i, LDR_i, STR_i, END_i } INSTRUCTIONS;
 
 
 extern INSTRUCTIONS decode(unsigned short inst);
@@ -151,7 +151,7 @@ extern void SWAP_instr(unsigned short SRA, unsigned short DRA, unsigned short SR
 extern void MOVx_instr(unsigned short instr, unsigned short DRA, unsigned short B, unsigned short DST);
 extern void MOV_instr(unsigned short SRA, unsigned short DRA, enum SIZE bw, unsigned short SRC, unsigned short DST);
 extern void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned short SC, unsigned short DST);
-extern void LDR_STR_instr(enum LDR_STR instr, unsigned short SDRA ,unsigned short OFF, enum SIZE bw, unsigned short SRC, unsigned short DST);
+extern void LDR_STR_instr(unsigned short instr, unsigned short SDRA ,unsigned short OFF, enum SIZE bw, unsigned short SRC, unsigned short DST);
 extern void LD_instr(unsigned short DI, unsigned short SDRA, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short ADR, unsigned short DST);
 extern void ST_instr(unsigned short DI, unsigned short SDRA, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short SRC, unsigned short ADR);
 

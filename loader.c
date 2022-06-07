@@ -89,7 +89,6 @@ int loader()
 
                 memory.byte[address] = byte;
                 // printf("%X %X\n", address, byte);
-
                 address++;
                 count = count - 1;
                 pos = pos + 2;
@@ -135,7 +134,7 @@ int loader()
         }
     }
 
-    set_default_breakpoint(final_addr);
+    // set_default_breakpoint(final_addr);
 
     printf("\n********** LOADER DONE **********\n");
     fclose(infile);

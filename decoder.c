@@ -29,7 +29,7 @@ INSTRUCTIONS decode(unsigned short inst)
             if (inst == BREAK_INSTRUCTION)
             {
                 printf("END\n");
-                return END;
+                return END_i;
             }
             printf("Illegal instruction\n");
             break;
@@ -47,7 +47,6 @@ INSTRUCTIONS decode(unsigned short inst)
         default:
             printf("invalid\n");
     }
-    return 1;
 }
 
 
@@ -139,9 +138,9 @@ short decode_LD_ST(unsigned short inst)
 // instruction is either LDR or STR
 short decode_LDR_STR(unsigned short inst)
 {
-    unsigned short SDRA = (inst >> 12) & 1;  // either SRA or DRA
+    unsigned short Mask13 = (inst >> 13) & 1;  // either SRA or DRA
 
-    if (SDRA == LDR)
+    if (Mask13 == 0)
         return LDR_i;  // SDRA is actually DRA
     else  // STR
         return STR_i;  // SDRA is actually SRA

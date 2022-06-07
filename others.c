@@ -10,13 +10,11 @@ void set_default_breakpoint(unsigned short adr)
 void memory_dump()
 {
     printf("\n******** DUMPING  MEMORY ********\n");
-    unsigned int i = 0;
-    while(memory.word[i] != BREAK_INSTRUCTION)
+    for (int i = 0; i < sizeof(memory.byte); i++)
     {
         // only print when register isn't empty
-        if (memory.word[i] != 0)
-            printf("0x%04X %04X\n", i, memory.word[i]);
-        i++;
+        if (memory.byte[i] == 0) continue;
+        printf("%04X %02X\n", i, memory.byte[i]);
     }
     printf("********* MEMORY DUMPED *********\n\n");
 }

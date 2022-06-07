@@ -1,14 +1,12 @@
 #include "emulator.h"
 
 unsigned long CPU_CLOCK = 0;
-unsigned short breakpoint = 0;
+unsigned short breakpoint = 0xFFFF;
 unsigned short custom_PC = CLEAR;
 
 int main()
 {
-    unsigned short IR, first_run = TRUE;
-    // INSTRUCTIONS instr;
-    unsigned short instr;
+    unsigned short IR, instr;
     char UI[MAX_USER_INPUT_LEN];
 
     // TODO: add argc and argv checks to open file through drag and drop
@@ -45,8 +43,10 @@ int main()
 
             while (PC < breakpoint && IR != BREAK_INSTRUCTION)
             {
+                printf("\n");
                 IR = fetch();
                 instr = decode(IR);
+                if (instr == END_i) break;
                 printf("passing instr number: %d\n", instr);
                 execute(instr, IR);
                 display_regfile();
