@@ -76,9 +76,6 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/mk/Desktop/XMX-Emulator/SignExtn.c">
-			<Option target="XMX_Emulator"/>
-		</Unit>
 		<Unit filename="/Users/mk/Desktop/XMX-Emulator/bus.c">
 			<Option target="XMX_Emulator"/>
 		</Unit>
@@ -100,19 +97,13 @@
 		<Unit filename="/Users/mk/Desktop/XMX-Emulator/main.c">
 			<Option target="XMX_Emulator"/>
 		</Unit>
-		<Unit filename="/Users/mk/Desktop/XMX-Emulator/memory_dump.c">
+		<Unit filename="/Users/mk/Desktop/XMX-Emulator/others.c">
 			<Option target="XMX_Emulator"/>
 		</Unit>
 		<Unit filename="/Users/mk/Desktop/XMX-Emulator/psw.c">
 			<Option target="XMX_Emulator"/>
 		</Unit>
 		<Unit filename="/Users/mk/Desktop/XMX-Emulator/register_file.c">
-			<Option target="XMX_Emulator"/>
-		</Unit>
-		<Unit filename="/Users/mk/Desktop/XMX-Emulator/set_PC.c">
-			<Option target="XMX_Emulator"/>
-		</Unit>
-		<Unit filename="/Users/mk/Desktop/XMX-Emulator/set_breakpoint.c">
 			<Option target="XMX_Emulator"/>
 		</Unit>
 		<Unit filename="/Users/mk/Desktop/XMX-Emulator/CMakeLists.txt">

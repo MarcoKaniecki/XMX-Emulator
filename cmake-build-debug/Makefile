@@ -129,30 +129,6 @@ XMX_Emulator/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/build
 .PHONY : XMX_Emulator/fast
 
-SignExtn.o: SignExtn.c.o
-.PHONY : SignExtn.o
-
-# target to build an object file
-SignExtn.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/SignExtn.c.o
-.PHONY : SignExtn.c.o
-
-SignExtn.i: SignExtn.c.i
-.PHONY : SignExtn.i
-
-# target to preprocess a source file
-SignExtn.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/SignExtn.c.i
-.PHONY : SignExtn.c.i
-
-SignExtn.s: SignExtn.c.s
-.PHONY : SignExtn.s
-
-# target to generate assembly for a file
-SignExtn.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/SignExtn.c.s
-.PHONY : SignExtn.c.s
-
 bus.o: bus.c.o
 .PHONY : bus.o
 
@@ -297,29 +273,29 @@ main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/main.c.s
 .PHONY : main.c.s
 
-memory_dump.o: memory_dump.c.o
-.PHONY : memory_dump.o
+others.o: others.c.o
+.PHONY : others.o
 
 # target to build an object file
-memory_dump.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/memory_dump.c.o
-.PHONY : memory_dump.c.o
+others.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/others.c.o
+.PHONY : others.c.o
 
-memory_dump.i: memory_dump.c.i
-.PHONY : memory_dump.i
+others.i: others.c.i
+.PHONY : others.i
 
 # target to preprocess a source file
-memory_dump.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/memory_dump.c.i
-.PHONY : memory_dump.c.i
+others.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/others.c.i
+.PHONY : others.c.i
 
-memory_dump.s: memory_dump.c.s
-.PHONY : memory_dump.s
+others.s: others.c.s
+.PHONY : others.s
 
 # target to generate assembly for a file
-memory_dump.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/memory_dump.c.s
-.PHONY : memory_dump.c.s
+others.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/others.c.s
+.PHONY : others.c.s
 
 psw.o: psw.c.o
 .PHONY : psw.o
@@ -369,54 +345,6 @@ register_file.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/register_file.c.s
 .PHONY : register_file.c.s
 
-set_PC.o: set_PC.c.o
-.PHONY : set_PC.o
-
-# target to build an object file
-set_PC.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/set_PC.c.o
-.PHONY : set_PC.c.o
-
-set_PC.i: set_PC.c.i
-.PHONY : set_PC.i
-
-# target to preprocess a source file
-set_PC.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/set_PC.c.i
-.PHONY : set_PC.c.i
-
-set_PC.s: set_PC.c.s
-.PHONY : set_PC.s
-
-# target to generate assembly for a file
-set_PC.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/set_PC.c.s
-.PHONY : set_PC.c.s
-
-set_breakpoint.o: set_breakpoint.c.o
-.PHONY : set_breakpoint.o
-
-# target to build an object file
-set_breakpoint.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/set_breakpoint.c.o
-.PHONY : set_breakpoint.c.o
-
-set_breakpoint.i: set_breakpoint.c.i
-.PHONY : set_breakpoint.i
-
-# target to preprocess a source file
-set_breakpoint.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/set_breakpoint.c.i
-.PHONY : set_breakpoint.c.i
-
-set_breakpoint.s: set_breakpoint.c.s
-.PHONY : set_breakpoint.s
-
-# target to generate assembly for a file
-set_breakpoint.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/set_breakpoint.c.s
-.PHONY : set_breakpoint.c.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -426,9 +354,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... XMX_Emulator"
-	@echo "... SignExtn.o"
-	@echo "... SignExtn.i"
-	@echo "... SignExtn.s"
 	@echo "... bus.o"
 	@echo "... bus.i"
 	@echo "... bus.s"
@@ -447,21 +372,15 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... memory_dump.o"
-	@echo "... memory_dump.i"
-	@echo "... memory_dump.s"
+	@echo "... others.o"
+	@echo "... others.i"
+	@echo "... others.s"
 	@echo "... psw.o"
 	@echo "... psw.i"
 	@echo "... psw.s"
 	@echo "... register_file.o"
 	@echo "... register_file.i"
 	@echo "... register_file.s"
-	@echo "... set_PC.o"
-	@echo "... set_PC.i"
-	@echo "... set_PC.s"
-	@echo "... set_breakpoint.o"
-	@echo "... set_breakpoint.i"
-	@echo "... set_breakpoint.s"
 .PHONY : help
 
 

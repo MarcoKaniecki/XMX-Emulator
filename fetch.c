@@ -6,15 +6,13 @@
 // return instr/data from Effective address
 int fetch()
 {
-    unsigned short mar, mbr;
+    unsigned short mbr;
 
     CPU_CLOCK++;
 
-    mar = PC;
-    bus(mar, &mbr, read, word);
-    PC = PC + 2;  // Increment PC by 2 because of word
-    if (mbr != 0)
-        printf("Fetching... 0x%04X %04X\n", mar, mbr);
+    bus(PC, &mbr, read, word);
+    printf("Fetching... 0x%04X %04X\n", PC, mbr);
+    PC = PC + 2;  // Increment PC
 
     return mbr;
 }

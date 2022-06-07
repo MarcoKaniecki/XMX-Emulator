@@ -53,7 +53,9 @@ extern unsigned long CPU_CLOCK;
 #define MSB3(x) (((x) >> 13) & 0x07)
 #define BL_OFF(x) ((x) & 0x1FFF)  // BL
 #define BR_OFF(x) ((x) & 0x3FF)
-
+#define LDR_STR_OFF(x) (((x) >> 7) & 0x1F)
+#define LD_ADR(x) (((x) >> 3) & 0x07)
+#define ST_ADR(x) ((x) & 0x07)
 
 #define MASK001X(x) (((x) >> 12) & 1)
 
@@ -65,26 +67,26 @@ extern unsigned long CPU_CLOCK;
 
 #define MASK1111(x)  (((x) >> 8) & 0x0F)  // instruction
 
-enum OPCODE00100X {BR, CEX};
 enum OPCODE10XX {MOVL, MOVLZ, MOVLS, MOVH};
 enum OPCODE0011 {SRAorRRC, ADD, ADDC, SUB, SUBC, CMP, XOR, AND, OR, BIT, BIS, BIC, MOV, MOV_SRA, SWAP, SWAP_SRA};
 
-extern int decode(unsigned short IR);
-extern void decode_LD_ST(int inst);
-extern void decode_LDR_STR(int inst);
-extern void decode_BR_to_CLRCC(int inst);
-extern void decode_SRA_to_SWAP(int inst);
+extern short decode_LD_ST(unsigned short inst);
+extern short decode_LDR_STR(unsigned short inst);
+extern short decode_BR_to_CLRCC(unsigned short inst);
+extern short decode_SRA_to_SWAP(unsigned short inst);
 // ****************************************
 
 enum ACTION { read, write };
-enum SIZE { byte, word };
-enum ADD_SUB { add, sub };
+enum SIZE { word, byte };
 enum BITS { Bit0, Bit1, Bit2, Bit3, Bit4, Bit5, Bit6, Bit7, Bit8, Bit9, Bit10, Bit11, Bit12, Bit13, Bit14, Bit15 };
 enum SRAorRRC { SRA, RRC };
 enum LDR_STR { LDR, STR };
-enum LD_ST { LD, ST };
 enum LD_ST_ADDRESSING {direct, indexed};
+typedef enum INSTRUCTIONS { BL_i, BR_i, CEX_i, SWPB_i, SXT_i, SRAorRRC_i, ADD_i, ADDC_i, SUB_i, SUBC_i, CMP_i, XOR_i, AND_i, OR_i,
+        BIT_i, BIS_i, BIC_i, MOV_i, SWAP_i, LD_i, ST_i, MOVx_i, LDR_i, STR_i } INSTRUCTIONS;
 
+
+extern INSTRUCTIONS decode(unsigned short inst);
 
 typedef struct psw
 {
@@ -115,12 +117,8 @@ extern union mem memory;
 
 extern union word_byte regfile[2][16];
 
-extern unsigned short custom_breakpoint_loc;  // contains address of where custom breakpoint is
-extern unsigned short custom_PC;  // check in loader if custom PC has been set, set in set_starting_adr.c
-
-// when a custom breakpoint is set an addr containing data/instr may be overwritten
-extern unsigned short data_overwritten_at_breakpoint;
-
+extern unsigned short breakpoint;
+extern unsigned short custom_PC;
 
 extern unsigned carry[2][2][2];
 extern unsigned overflow[2][2][2];
@@ -128,10 +126,9 @@ extern unsigned overflow[2][2][2];
 
 extern psw PSW;
 
+extern void execute(INSTRUCTIONS inst, unsigned short full_inst);
 
 extern void set_default_breakpoint(unsigned short adr);
-extern void set_custom_breakpoint(unsigned short adr);
-extern void set_PC(unsigned short adr);
 extern void display_regfile();
 extern void modify_regfile();
 
@@ -155,8 +152,8 @@ extern void MOVx_instr(unsigned short instr, unsigned short DRA, unsigned short 
 extern void MOV_instr(unsigned short SRA, unsigned short DRA, enum SIZE bw, unsigned short SRC, unsigned short DST);
 extern void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned short SC, unsigned short DST);
 extern void LDR_STR_instr(enum LDR_STR instr, unsigned short SDRA ,unsigned short OFF, enum SIZE bw, unsigned short SRC, unsigned short DST);
-extern void LD_instr(unsigned short DI, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short ADR, unsigned short DST);
-extern void ST_instr(unsigned short DI, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short SRC, unsigned short ADR);
+extern void LD_instr(unsigned short DI, unsigned short SDRA, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short ADR, unsigned short DST);
+extern void ST_instr(unsigned short DI, unsigned short SDRA, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short SRC, unsigned short ADR);
 
 
 // Functions provided by Dr. Hughes

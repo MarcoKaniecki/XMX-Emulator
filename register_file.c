@@ -15,10 +15,10 @@ void display_regfile()
     printf("R1: %04X   A1: %04X\n", regfile[0][1].word, regfile[0][9].word);
     printf("R2: %04X   A2: %04X\n", regfile[0][2].word, regfile[0][10].word);
     printf("R3: %04X   A3: %04X\n", regfile[0][3].word, regfile[0][11].word);
-    printf("R4: %04X   A4: %04X\n", regfile[0][4].word, regfile[0][12].word);
-    printf("R5: %04X   A5: %04X\n", regfile[0][5].word, LR);  // regfile[0][13]
-    printf("R6: %04X   A6: %04X\n", regfile[0][6].word, SP);  // regfile[0][14]
-    printf("R7: %04X   A7: %04X\n", regfile[0][7].word, PC);  // regfile[0][15]
+    printf("R4: %04X   BP: %04X\n", regfile[0][4].word, regfile[0][12].word);
+    printf("R5: %04X   LR: %04X\n", regfile[0][5].word, LR);  // regfile[0][13]
+    printf("R6: %04X   SP: %04X\n", regfile[0][6].word, SP);  // regfile[0][14]
+    printf("R7: %04X   PC: %04X\n", regfile[0][7].word, PC);  // regfile[0][15]
 }
 
 

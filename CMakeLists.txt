@@ -7,12 +7,8 @@ add_executable(XMX_Emulator
         main.c
         loader.c
         emulator.h
-        memory_dump.c
         bus.c fetch.c
         decoder.c
-        set_breakpoint.c
         register_file.c
-        set_PC.c
         execute.c
-        SignExtn.c
-        psw.c)
+        psw.c others.c)

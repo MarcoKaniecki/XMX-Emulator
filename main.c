@@ -1,16 +1,25 @@
 #include "emulator.h"
 
-unsigned short custom_breakpoint_loc;
 unsigned long CPU_CLOCK = 0;
+unsigned short breakpoint = 0;
+unsigned short custom_PC = CLEAR;
 
 int main()
 {
-    unsigned short IR, action, first_run = TRUE;
+    unsigned short IR, first_run = TRUE;
+    // INSTRUCTIONS instr;
+    unsigned short instr;
     char UI[MAX_USER_INPUT_LEN];
 
     // TODO: add argc and argv checks to open file through drag and drop
 
     // TODO: set initial CPU states, see p.81 XMX Design Doc
+    PC = PC_default;
+    SP = SP_default;
+    PSW.C = CLEAR;
+    PSW.N = CLEAR;
+    PSW.V = CLEAR;
+    PSW.Z = CLEAR;
 
     while (1)
     {
@@ -18,13 +27,10 @@ int main()
         printf("CPU clock cycles: %lu\n", CPU_CLOCK);
         printf("r   - run\n");
         printf("md  - Memory Dump\n");
-        // printf("dc  - Display Contents at Memory Location\n");
         printf("drf - Display Register File\n");
         printf("mrf - Modify Register File\n");
         printf("sb  - Set Breakpoint\n");
-        printf("cb  - Clear Breakpoint\n");
-        printf("sp  - Set Custom PC\n");
-        printf("rp  - Revert PC\n");
+        printf("sp  - Set PC\n");
         printf("E   - Exit Emulator\n");
 
         printf("> ");
@@ -34,24 +40,17 @@ int main()
 
         if (strcmp(UI, "r") == 0)  // run
         {
-            action = 1;  // reset if another run is performed
-
             // load data/instructions into main memory
-            if (first_run)
-            {
-                loader();
-                first_run = FALSE;
-            }
+            loader();
 
-            while (action != END)
+            while (PC < breakpoint && IR != BREAK_INSTRUCTION)
             {
                 IR = fetch();
-                if (IR != 0)
-                    printf("Sending to Decoder... %X\n", IR);
-
-                action = decode(IR);
+                instr = decode(IR);
+                printf("passing instr number: %d\n", instr);
+                execute(instr, IR);
+                display_regfile();
             }
-            // execute run from decode func
         }
         else if (strcmp(UI, "md") == 0)  // Memory dump
             memory_dump();
@@ -74,34 +73,18 @@ int main()
         else if (strcmp(UI, "sb") == 0)  // set breakpoint
         {
             // TODO: currently not working because loader is overwriting breakpoint location when running program again
-            int set_breakpoint;
-            // value to be set will be 0x6000
-            printf("Specify breakpoint location as word\n");
+            printf("Specify breakpoint location\n");
             printf("> ");
-            scanf("%X", &set_breakpoint);
+            scanf("%hX", &breakpoint);
             getchar();
-            set_custom_breakpoint(set_breakpoint);
-        }
-        else if (strcmp(UI, "cb") == 0)  // clear breakpoint
-        {
-            memory.word[custom_breakpoint_loc] = data_overwritten_at_breakpoint;
-            printf("Cleared custom breakpoint location\n");
+
         }
         else if (strcmp(UI, "sp") == 0)  // set custom PC
         {
-            int set_starting_adr;
-
-            printf("Specify PC location as word\n");
             printf("> ");
-            scanf("%X", &set_starting_adr);
+            scanf("%hX", &PC);
             getchar();
-            set_PC(set_starting_adr);
-
-        }
-        else if (strcmp(UI, "rp") == 0)  // revert PC to what was given in S-Record input file
-        {
-            printf("Removing custom PC location...\n");
-            custom_PC = CLEAR;
+            custom_PC = SET;
         }
         else if (strcmp(UI, "E") == 0)  // exit program
         {

@@ -5,9 +5,6 @@
 
 union mem memory = {0};
 
-// initially no custom PC has been set
-unsigned short custom_PC = CLEAR;
-
 FILE *infile;
 char srec[MAX_REC_LEN];
 
@@ -19,7 +16,7 @@ int loader()
     unsigned int count, ahi, alo, byte;
     unsigned short address, final_addr;
 
-    infile = fopen("Strings.xme", "r");
+    infile = fopen("StkFrm.xme", "r");
 
     while(fgets(srec, MAX_REC_LEN, infile) > 0)
     {
@@ -132,7 +129,6 @@ int loader()
                 // continue;
             }
 
-            // prevent overwriting PC after manually setting it
             if (custom_PC == CLEAR)
                 PC = address;  // assign program counter to starting addr
 

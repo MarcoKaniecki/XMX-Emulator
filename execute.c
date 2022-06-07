@@ -5,6 +5,115 @@
 
 union word_byte srcnum, dstnum;
 
+void execute(INSTRUCTIONS inst, unsigned short full_inst)
+{
+    switch (inst)
+    {
+        case BL_i:
+            if (BL_OFF(full_inst) != 0)
+                printf("BL\n");
+            BL_instr(BL_OFF(full_inst));
+            break;
+        case BR_i:
+            printf("BR OFF: %04X\n", BR_OFF(full_inst));
+            BR_instr(BR_OFF(full_inst));
+            break;
+        case CEX_i:
+            printf("CEX\n");
+            break;
+        case SWPB_i:
+            printf("SWPB\n");
+            SWPB_instr(DEST(full_inst));
+            break;
+        case SXT_i:
+            printf("SXT\n");
+            SXT_instr(DEST(full_inst));
+            break;
+        case SRAorRRC_i:
+            printf("SRA or RRC\n");
+            SRAorRRC_instr(EXTR_BIT(full_inst, Bit7), EXTR_WB(full_inst), DEST(full_inst));
+            break;
+        case ADD_i:
+            printf("ADD\n");
+            ADDtoOR_instr(ADD, EXTR_SC(full_inst), DEST(full_inst), 0, EXTR_RC(full_inst), EXTR_WB(full_inst));
+            break;
+        case ADDC_i:
+            printf("ADDC\n");
+            ADDtoOR_instr(ADDC, EXTR_SC(full_inst), DEST(full_inst), PSW.C, EXTR_RC(full_inst), EXTR_WB(full_inst));
+            break;
+        case SUB_i:
+            printf("SUB\n");
+            ADDtoOR_instr(SUB, EXTR_SC(full_inst), DEST(full_inst), 1, EXTR_RC(full_inst), EXTR_WB(full_inst));
+            break;
+        case SUBC_i:
+            printf("SUBC\n");
+            ADDtoOR_instr(SUBC, EXTR_SC(full_inst), DEST(full_inst), PSW.C, EXTR_RC(full_inst), EXTR_WB(full_inst));
+            break;
+        case CMP_i:
+            printf("CMP\n");
+            ADDtoOR_instr(CMP, EXTR_SC(full_inst), DEST(full_inst), 0, EXTR_RC(full_inst), EXTR_WB(full_inst));
+            break;
+        case XOR_i:
+            printf("XOR\n");
+            ADDtoOR_instr(XOR, EXTR_SC(full_inst), DEST(full_inst), 0, EXTR_RC(full_inst), EXTR_WB(full_inst));
+            break;
+        case AND_i:
+            printf("AND\n");
+            ADDtoOR_instr(AND, EXTR_SC(full_inst), DEST(full_inst), 0, EXTR_RC(full_inst), EXTR_WB(full_inst));
+            break;
+        case OR_i:
+            printf("OR\n");
+            ADDtoOR_instr(OR, EXTR_SC(full_inst), DEST(full_inst), 0, EXTR_RC(full_inst), EXTR_WB(full_inst));
+            break;
+        case BIT_i:
+            printf("BIT\n");
+            BIx_instr(BIT, EXTR_RC(full_inst), EXTR_WB(full_inst), EXTR_SC(full_inst), DEST(full_inst));
+            break;
+        case BIS_i:
+            printf("BIS\n");
+            BIx_instr(BIS, EXTR_RC(inst), EXTR_WB(full_inst), EXTR_SC(full_inst), DEST(full_inst));
+            break;
+        case BIC_i:
+            printf("BIC\n");
+            BIx_instr(BIC, EXTR_RC(inst), EXTR_WB(full_inst), EXTR_SC(full_inst), DEST(full_inst));
+            break;
+        case MOV_i:
+            printf("MOV\n");
+            MOV_instr(EXTR_SRA(full_inst, Bit8), EXTR_DRA(full_inst, Bit7), EXTR_WB(full_inst), EXTR_SRC(full_inst), DEST(full_inst));
+            break;
+        case SWAP_i:
+            printf("SWAP\n");
+            SWAP_instr(EXTR_SRA(full_inst, Bit8), EXTR_DRA(full_inst, Bit7), EXTR_SRC(full_inst), DEST(full_inst));
+            break;
+        case LD_i:
+            printf("LD\n");
+            LD_instr(EXTR_BIT(full_inst, Bit10), EXTR_BIT(full_inst, Bit9), EXTR_BIT(full_inst, Bit8),
+                     EXTR_BIT(full_inst, Bit7), EXTR_WB(full_inst), LD_ADR(full_inst), DEST(full_inst));
+            break;
+        case ST_i:
+            printf("ST\n");
+            ST_instr(EXTR_BIT(full_inst, Bit10), EXTR_BIT(full_inst, Bit9), EXTR_BIT(full_inst, Bit8),
+                     EXTR_BIT(full_inst, Bit7), EXTR_WB(full_inst), EXTR_SC(full_inst), ST_ADR(full_inst));
+            break;
+        case MOVx_i:
+            printf("MOVx instr: %X\n", full_inst);
+            printf("MOVx instr num: %d\n", MOVx(full_inst));
+            MOVx_instr(MOVx(full_inst), EXTR_DRA(full_inst, Bit11), B(full_inst), DEST(full_inst));
+            break;
+        case LDR_i:
+            printf("LDR\n");
+            LDR_STR_instr(LDR, EXTR_BIT(full_inst, Bit12), LDR_STR_OFF(full_inst), EXTR_WB(full_inst), EXTR_SRC(full_inst), DEST(full_inst));
+            break;
+        case STR_i:
+            printf("STR\n");
+            LDR_STR_instr(STR, EXTR_BIT(full_inst, Bit12), LDR_STR_OFF(full_inst), EXTR_WB(full_inst), EXTR_SRC(full_inst), DEST(full_inst));
+            break;
+        default:
+            printf("invalid\n");
+    }
+}
+
+
 // branch with link, return to LR loc after subroutine is done
 void BL_instr(unsigned short OFF)
 {
@@ -116,21 +225,26 @@ void SWAP_instr(unsigned short SRA, unsigned short DRA, unsigned short SRC, unsi
 void MOVx_instr(unsigned short instr, unsigned short DRA, unsigned short B, unsigned short DST)
 {
     unsigned short DST_reg = DST | (DRA << 3);
+    printf("dst_reg = %d\n", DST_reg);
 
     switch (instr)
     {
         case MOVL:
+            printf("movl\n");
             regfile[0][DST_reg].byte[0] = B;
             break;
         case MOVLZ:
+            printf("movlz\n");
             regfile[0][DST_reg].byte[0] = B;
             regfile[0][DST_reg].byte[1] = 0;
             break;
         case MOVLS:
+            printf("movls\n");
             regfile[0][DST_reg].byte[0] = B;
             regfile[0][DST_reg].byte[1] = 0xFF;
             break;
         case MOVH:
+            printf("movh\n");
             regfile[0][DST_reg].byte[1] = B;
             break;
         default:
@@ -240,6 +354,8 @@ void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned s
         default:
             printf("invalid\n");
     }
+    // TODO: update PSW
+    // update_psw();
 }
 
 // Load relative from SRC address register + offset to DST (data or address) register
@@ -283,12 +399,12 @@ void LDR_STR_instr(enum LDR_STR instr, unsigned short SDRA ,unsigned short OFF, 
 }
 
 // Load from SRC address register to DST (data or address) register
-void LD_instr(unsigned short DI, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short ADR, unsigned short DST)
+void LD_instr(unsigned short DI, unsigned short SDRA, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short ADR, unsigned short DST)
 {
     unsigned short EA, mbr;
 
-    // ADR is already set to addressing register
-    // DST is already set to be data or addressing register
+    DST = DST | (SDRA << 3);
+    ADR = ADR | 0x08;
 
     // Effective address pre increment
     if (DI == direct)
@@ -297,15 +413,21 @@ void LD_instr(unsigned short DI, unsigned short PRPO, unsigned short ID, enum SI
     }
     else  // indexed
     {
-        if (PRPO == 0)  // pre increment/decrement
+        if (PRPO == 0)  // pre
         {
             if (ID == 0)  // increment
             {
-                regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word + 2 : regfile[0][ADR].byte[0] + 1;
+                if (bw == word)
+                    regfile[0][ADR].word = regfile[0][ADR].word + 2;
+                else
+                    regfile[0][ADR].byte[0] = regfile[0][ADR].byte[0] + 1;
             }
             else  // decrement
             {
-                regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word - 2 : regfile[0][ADR].byte[0] - 1;
+                if (bw == word)
+                    regfile[0][ADR].word = regfile[0][ADR].word - 2;
+                else
+                    regfile[0][ADR].byte[0] = regfile[0][ADR].byte[0] - 1;
             }
         }
         EA = regfile[0][ADR].word;
@@ -326,22 +448,28 @@ void LD_instr(unsigned short DI, unsigned short PRPO, unsigned short ID, enum SI
     {
         if (ID == 0)  // increment
         {
-            regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word + 2 : regfile[0][ADR].byte[0] + 1;
+            if (bw == word)
+                regfile[0][ADR].word = regfile[0][ADR].word + 2;
+            else
+                regfile[0][ADR].byte[0] = regfile[0][ADR].byte[0] + 1;
         }
         else  // decrement
         {
-            regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word - 2 : regfile[0][ADR].byte[0] - 1;
+            if (bw == word)
+                regfile[0][ADR].word = regfile[0][ADR].word - 2;
+            else
+                regfile[0][ADR].byte[0] = regfile[0][ADR].byte[0] - 1;
         }
     }
 }
 
 // Store from SRC (data or address) register to DST address register
-void ST_instr(unsigned short DI, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short SRC, unsigned short ADR)
+void ST_instr(unsigned short DI, unsigned short SDRA, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short SRC, unsigned short ADR)
 {
     unsigned short EA, mbr;
 
-    // SRC is already set to be data or addressing register
-    // ADR is already set to addressing register
+    ADR = ADR | 0x08;
+    SRC = SRC | (SDRA << 3);
 
     // Effective address pre increment
     if (DI == direct)
@@ -354,11 +482,21 @@ void ST_instr(unsigned short DI, unsigned short PRPO, unsigned short ID, enum SI
         {
             if (ID == 0)  // increment
             {
-                regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word + 2 : regfile[0][ADR].byte[0] + 1;
+                if (bw == word)
+                    regfile[0][ADR].word = regfile[0][ADR].word + 2;
+                else
+                    regfile[0][ADR].byte[0] = regfile[0][ADR].byte[0] + 1;
             }
             else  // decrement
             {
-                regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word - 2 : regfile[0][ADR].byte[0] - 1;
+                printf("got to pre decrement\n");
+                if (bw == word)
+                {
+                    printf("got to pre decrement by word\n");
+                    regfile[0][ADR].word = regfile[0][ADR].word - 2;
+                }
+                else
+                    regfile[0][ADR].byte[0] = regfile[0][ADR].byte[0] - 1;
             }
         }
         EA = regfile[0][ADR].word;
@@ -379,11 +517,17 @@ void ST_instr(unsigned short DI, unsigned short PRPO, unsigned short ID, enum SI
     {
         if (ID == 0)  // increment
         {
-            regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word + 2 : regfile[0][ADR].byte[0] + 1;
+            if (bw == word)
+                regfile[0][ADR].word = regfile[0][ADR].word + 2;
+            else
+                regfile[0][ADR].byte[0] = regfile[0][ADR].byte[0] + 1;
         }
         else  // decrement
         {
-            regfile[0][ADR].word = (bw == word)? regfile[0][ADR].word - 2 : regfile[0][ADR].byte[0] - 1;
+            if (bw == word)
+                regfile[0][ADR].word = regfile[0][ADR].word - 2;
+            else
+                regfile[0][ADR].byte[0] = regfile[0][ADR].byte[0] - 1;
         }
     }
 }
