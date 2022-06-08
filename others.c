@@ -1,26 +1,6 @@
 #include "emulator.h"
 
-// sets breakpoint after instruction at highest memory location
-void set_default_breakpoint(unsigned short adr)
-{
-    memory.word[(adr >> 1) + 1] = BREAK_INSTRUCTION;
-}
-
-// print out anything in memory that's not zero
-void memory_dump()
-{
-    printf("\n******** DUMPING  MEMORY ********\n");
-    for (int i = 0; i < sizeof(memory.byte); i++)
-    {
-        // only print when register isn't empty
-        if (memory.byte[i] == 0) continue;
-        printf("%04X %02X\n", i, memory.byte[i]);
-    }
-    printf("********* MEMORY DUMPED *********\n\n");
-}
-
-
-// ********* Code below provided by Dr. Hughes ****************
+// ********* 2 functions below provided by Dr. Hughes ****************
 /*
  - Extract and sign extend any bit for any 16-bit bit pattern
  - ECED 3403
@@ -52,3 +32,16 @@ unsigned short extract_bits(unsigned short value, unsigned short signbit)
 
 }
 // **************************************************************
+
+// print out anything in memory that's not zero
+void memory_dump()
+{
+    printf("\n******** DUMPING  MEMORY ********\n");
+    for (int i = 0; i < sizeof(memory.byte); i++)
+    {
+        // only print when register isn't empty
+        if (memory.byte[i] == 0) continue;
+        printf("%04X %02X\n", i, memory.byte[i]);
+    }
+    printf("********* MEMORY DUMPED *********\n");
+}

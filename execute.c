@@ -7,19 +7,24 @@ union word_byte srcnum, dstnum;
 
 void execute(INSTRUCTIONS inst, unsigned short full_inst)
 {
+    CPU_CLOCK++;
+
     switch (inst)
     {
         case BL_i:
+            CEX.state = OFF_state;
             if (BL_OFF(full_inst) != 0)
                 printf("BL OFF: %X\n", BL_OFF(full_inst));
             BL_instr(BL_OFF(full_inst));
             break;
         case BR_i:
+            CEX.state = OFF_state;
             printf("BR OFF: %X\n", BR_OFF(full_inst));
             BR_instr(BR_OFF(full_inst));
             break;
         case CEX_i:
             printf("CEX\n");
+            CEX_instr(CEX_C(full_inst), CEX_T(full_inst), CEX_F(full_inst));
             break;
         case SWPB_i:
             printf("SWPB\n");
@@ -113,6 +118,107 @@ void execute(INSTRUCTIONS inst, unsigned short full_inst)
     }
 }
 
+// conditional execution
+void CEX_instr(unsigned short C, unsigned short T, unsigned short F)
+{
+    CEX.state = ON_state;
+    CEX.T_count = T;
+    CEX.F_count = F;
+    
+    switch(C)
+    {
+        case EQ:
+            if(PSW.Z == SET)
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case NE:
+            if(PSW.Z == CLEAR)
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case CS_HS:
+            if(PSW.C == SET)
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case CC_LO:
+            if(PSW.C == CLEAR)
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case MI:
+            if(PSW.N == SET)
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case PL:
+            if(PSW.N == CLEAR)
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case VS:
+            if(PSW.V == SET)
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case VC:
+            if(PSW.V == CLEAR)
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case HI:
+            if(PSW.C == SET && PSW.Z == CLEAR)
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case LS:
+            if(PSW.C == CLEAR && PSW.Z == SET)
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case GE:
+            if(PSW.N == PSW.V)
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case LT:
+            if(PSW.N != PSW.V)
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case GT:
+            if((PSW.Z == CLEAR) && (PSW.N == PSW.V))
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case LE:
+            if((PSW.Z == SET) && (PSW.N != PSW.V))
+                CEX.TorF = TRUE;
+            else
+                CEX.TorF = FALSE;
+            break;
+        case TR:
+        case FL:
+            printf("ignored\n");
+            break;
+        default:
+            printf("invalid\n");
+    }
+}
 
 // branch with link, return to LR loc after subroutine is done
 void BL_instr(unsigned short OFF)

@@ -14,7 +14,7 @@ int loader()
     unsigned int rec_chksum;
     unsigned char type, type_num, checksum;
     unsigned int count, ahi, alo, byte;
-    unsigned short address, final_addr;
+    unsigned short address;
 
     infile = fopen("StkFrm.xme", "r");
 
@@ -102,9 +102,6 @@ int loader()
                 // printf("bad checksum: %s", srec);
                 // continue;
             }
-            // assign final addr at highest memory location
-            if (final_addr < address)
-                final_addr = address;
         }
         else if (type_num == '9')
         {
@@ -130,13 +127,10 @@ int loader()
 
             if (custom_PC == CLEAR)
                 PC = address;  // assign program counter to starting addr
-
         }
     }
 
-    // set_default_breakpoint(final_addr);
-
-    printf("\n********** LOADER DONE **********\n");
+    printf("********** LOADER DONE **********\n");
     fclose(infile);
     return 0;
 }

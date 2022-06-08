@@ -20,6 +20,8 @@
 
 #define SET 1
 #define TRUE 1
+#define ON_state 1
+#define OFF_state 0
 #define FALSE 0
 #define CLEAR 0
 #define END 0
@@ -34,38 +36,27 @@ extern unsigned long CPU_CLOCK;
 
 
 // *********** USED IN DECODER ************
-
-// EXTR means extract
+// EXTR stands for extract
 #define EXTR_BIT(instr, loc) (((instr) >> (loc)) & 1)  // Extract a bit at a given location
-
-// extract operand stuff
 #define EXTR_RC(x) (((x) >> 7) & 1)
 #define EXTR_WB(x) (((x) >> 6) & 1)
 #define EXTR_SC(x) (((x) >> 3) & 0x07)
 #define DEST(x) ((x) & 0x07)  // D D D bits 0 to 2
-
+#define CEX_C(x) (((x) >> 6) & 0x0F)
+#define CEX_T(x) (((x) >> 3) & 0x07)
+#define CEX_F(x) ((x) & 0x07)
 #define EXTR_DRA(instr, loc) (((instr) >> (loc)) & 1)
 #define EXTR_SRA(instr, loc) (((instr) >> (loc)) & 1)
 #define B(x) (((x) >> 3) & 0xFF)
 #define EXTR_SRC(x) (((x) >> 3) & 0x07)
-
-// extract opcode stuff
 #define MSB3(x) (((x) >> 13) & 0x07)
 #define BL_OFF(x) ((x) & 0x1FFF)  // BL
 #define BR_OFF(x) ((x) & 0x3FF)
 #define LDR_STR_OFF(x) (((x) >> 7) & 0x1F)
 #define LD_ADR(x) (((x) >> 3) & 0x07)
 #define ST_ADR(x) ((x) & 0x07)
-
 #define MASK001X(x) (((x) >> 12) & 1)
-
-// for MOVx intructions
-#define MOVx(x)  (((x) >> 12) & 0x03)    // instruction
-#define BYTE011(x) (((x) >> 3) & 0xFF)  // Data byte
-// dabit shift 3 to right to get DRA D D D, giving 16 possibilities for the 16 total cpu registers
-#define DABIT(x) ((((x) >> 11) & 1) << 3)  // data (0) or Addr (1) register
-
-#define MASK1111(x)  (((x) >> 8) & 0x0F)  // instruction
+#define MOVx(x)  (((x) >> 12) & 0x03)
 
 enum OPCODE10XX {MOVL, MOVLZ, MOVLS, MOVH};
 enum OPCODE0011 {SRAorRRC, ADD, ADDC, SUB, SUBC, CMP, XOR, AND, OR, BIT, BIS, BIC, MOV, MOV_SRA, SWAP, SWAP_SRA};
@@ -85,6 +76,7 @@ enum LD_ST_ADDRESSING {direct, indexed};
 typedef enum INSTRUCTIONS { BL_i, BR_i, CEX_i, SWPB_i, SXT_i, SRAorRRC_i, ADD_i, ADDC_i, SUB_i, SUBC_i, CMP_i, XOR_i, AND_i, OR_i,
         BIT_i, BIS_i, BIC_i, MOV_i, SWAP_i, LD_i, ST_i, MOVx_i, LDR_i, STR_i, END_i } INSTRUCTIONS;
 
+enum CEX_INSTR { EQ, NE, CS_HS, CC_LO, MI, PL, VS, VC, HI, LS, GE, LT, GT, LE, TR, FL };
 
 extern INSTRUCTIONS decode(unsigned short inst);
 
@@ -97,6 +89,15 @@ typedef struct psw
 
 } psw;
 
+typedef struct cex
+{
+    unsigned short state;
+    unsigned short TorF;
+    unsigned short T_count;
+    unsigned short F_count;
+}cex;
+
+cex CEX;
 
 union mem
 {
@@ -136,15 +137,14 @@ extern void bus(unsigned short mar, unsigned short *mbr, enum ACTION rw, enum SI
 extern int loader();
 extern void memory_dump();  // show contents of memory
 extern int fetch();
-
 extern void update_psw(unsigned short src, unsigned short dst, unsigned short res, unsigned short wb);
-
 
 // execute functions
 extern void BL_instr(unsigned short OFF);
 extern void BR_instr(unsigned short OFF);
 extern void SWPB_instr(unsigned short DST);
 extern void SXT_instr(unsigned short DST);
+extern void CEX_instr(unsigned short C, unsigned short T, unsigned short F);
 extern void SRAorRRC_instr(enum SRAorRRC instr, enum SIZE bw, unsigned short DST);
 extern void ADDtoOR_instr(unsigned short instr, unsigned short SRC, unsigned short DST, unsigned short carry, unsigned short RC, enum SIZE bw);
 extern void SWAP_instr(unsigned short SRA, unsigned short DRA, unsigned short SRC, unsigned short DST);
@@ -154,7 +154,6 @@ extern void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, uns
 extern void LDR_STR_instr(unsigned short instr, unsigned short SDRA ,unsigned short OFF, enum SIZE bw, unsigned short SRC, unsigned short DST);
 extern void LD_instr(unsigned short DI, unsigned short SDRA, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short ADR, unsigned short DST);
 extern void ST_instr(unsigned short DI, unsigned short SDRA, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short SRC, unsigned short ADR);
-
 
 // Functions provided by Dr. Hughes
 extern unsigned short sign_ext(unsigned short offset, unsigned short signbit);

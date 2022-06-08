@@ -47,8 +47,8 @@ INSTRUCTIONS decode(unsigned short inst)
         default:
             printf("invalid\n");
     }
+    return END_i;
 }
-
 
 // any instruction between and including BR and CLRCC get further processed here
 short decode_BR_to_CLRCC(unsigned short inst)
@@ -61,9 +61,7 @@ short decode_BR_to_CLRCC(unsigned short inst)
         case 0:  // BR
             return BR_i;
         case 1:  // CEX
-            // TODO: yet to implement
-            printf("CEX\n");
-            break;
+            return CEX_i;
         case 2:  // SWPB or SXT
             if (Mask3 == 0)  // SWPB
                 return SWPB_i;
