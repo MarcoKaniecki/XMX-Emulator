@@ -5,7 +5,6 @@
 
 void bus(unsigned short mar, unsigned short *mbr, enum ACTION rw, enum SIZE bw)
 {
-    CPU_CLOCK = CPU_CLOCK + 3;
     /*
     * Bus (and memory access) emulator
     * - mar - memory address - refers to a byte location ( word is mar >> 1)
@@ -32,4 +31,6 @@ void bus(unsigned short mar, unsigned short *mbr, enum ACTION rw, enum SIZE bw)
     }
     else  // write word
         memory.word[mar >> 1] = *mbr;
+
+    CPU_CLOCK = CPU_CLOCK + 3;
 }

@@ -71,7 +71,6 @@ enum ACTION { read, write };
 enum SIZE { word, byte };
 enum BITS { Bit0, Bit1, Bit2, Bit3, Bit4, Bit5, Bit6, Bit7, Bit8, Bit9, Bit10, Bit11, Bit12, Bit13, Bit14, Bit15 };
 enum SRAorRRC { SRA, RRC };
-enum LDR_STR { LDR, STR };
 enum LD_ST_ADDRESSING {direct, indexed};
 typedef enum INSTRUCTIONS { BL_i, BR_i, CEX_i, SWPB_i, SXT_i, SRAorRRC_i, ADD_i, ADDC_i, SUB_i, SUBC_i, CMP_i, XOR_i, AND_i, OR_i,
         BIT_i, BIS_i, BIC_i, MOV_i, SWAP_i, LD_i, ST_i, MOVx_i, LDR_i, STR_i, END_i } INSTRUCTIONS;

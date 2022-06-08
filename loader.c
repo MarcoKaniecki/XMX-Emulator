@@ -16,7 +16,7 @@ int loader()
     unsigned int count, ahi, alo, byte;
     unsigned short address;
 
-    infile = fopen("StkFrm.xme", "r");
+    infile = fopen("A1test.xme", "r");
 
     while(fgets(srec, MAX_REC_LEN, infile) > 0)
     {
