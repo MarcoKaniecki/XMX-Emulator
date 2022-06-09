@@ -26,11 +26,6 @@ INSTRUCTIONS decode(unsigned short inst)
             return decode_LD_ST(inst);
             break;
         case 3:
-            if (inst == BREAK_INSTRUCTION)
-            {
-                printf("END\n");
-                return END_i;
-            }
             printf("Illegal instruction\n");
             break;
         case 4:  // MOVL, MOVLZ

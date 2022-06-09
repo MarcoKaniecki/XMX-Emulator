@@ -26,14 +26,14 @@
 #define OFF_state 0
 #define FALSE 0
 #define CLEAR 0
-
-#define BREAK_INSTRUCTION 0x6000
+#define NUL 0
+#define MEM_DUMP_SEGMENT_SIZE 16
 
 // *********** Initial CPU state **********
 #define PC_default 0x0800  // see p.81 in XMX Design Document
 #define SP_default 0x0800
 
-
+#define breakpoint_default 0xFFFF
 // *********** USED IN DECODER ************
 // EXTR stands for extract
 #define EXTR_BIT(instr, loc) (((instr) >> (loc)) & 1)  // Extract a bit at a given location
@@ -77,6 +77,8 @@ typedef enum INSTRUCTIONS { BL_i, BR_i, CEX_i, SWPB_i, SXT_i, SRAorRRC_i, ADD_i,
 
 extern INSTRUCTIONS decode(unsigned short inst);
 
+extern FILE *infile;
+extern char srec[MAX_REC_LEN];
 
 typedef struct psw
 {
@@ -130,7 +132,7 @@ extern void initial_CPU_state();  // when program starts initial values for PC, 
 extern void display_regfile();
 extern int loader();  // loads S-Records into memory
 extern int fetch();  // fetches data/instruction from memory
-extern void memory_dump();  // show contents of memory
+extern void memory_dump(unsigned short start_adr, unsigned short end_adr);  // show contents of memory
 extern void bus(unsigned short mar, unsigned short *mbr, enum ACTION rw, enum SIZE bw);  // used to access main memory
 extern void update_psw(unsigned short src, unsigned short dst, unsigned short res, unsigned short wb);
 

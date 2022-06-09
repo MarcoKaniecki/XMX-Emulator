@@ -5,17 +5,12 @@
 
 union mem memory = {0};
 
-FILE *infile;
-char srec[MAX_REC_LEN];
-
 int loader()
 {
     // program that reads and decodes s-records
     unsigned int rec_chksum, count, ahi, alo, byte;
     unsigned char type, type_num, checksum;
     unsigned short address;
-
-    infile = fopen("A1test.xme", "r");
 
     while(fgets(srec, MAX_REC_LEN, infile) > 0)
     {
@@ -118,14 +113,14 @@ int loader()
             sscanf(&srec[pos], "%2x", &rec_chksum);
             checksum = checksum + rec_chksum;
 
-            if (checksum != 0xFF)
-            {
-                // printf("bad checksum: %s", srec);
-                // continue;
-            }
-
             if (custom_PC == CLEAR)
                 PC = address;  // assign program counter to starting addr
+
+            if (checksum != 0xFF)
+            {
+                printf("bad checksum: %s", srec);
+                // continue;
+            }
         }
     }
 

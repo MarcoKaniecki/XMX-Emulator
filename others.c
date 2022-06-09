@@ -5,7 +5,6 @@ union word_byte regfile[2][16] = {0, 0, 0, 0, 0, 0, 0, 0, 0,
                                   0, 1, 2, 4, 6, 16, 32, -1};
 
 
-
 // ********* 2 functions below provided by Dr. Hughes ****************
 /*
  - Extract and sign extend any bit for any 16-bit bit pattern
@@ -40,16 +39,19 @@ unsigned short extract_bits(unsigned short value, unsigned short signbit)
 // **************************************************************
 
 // print out anything in memory that's not zero
-void memory_dump()
+void memory_dump(unsigned short start_adr, unsigned short end_adr)
 {
-    printf("\n******** DUMPING  MEMORY ********\n");
-    for (int i = 0; i < sizeof(memory.byte); i++)
+    unsigned short curr_adr = start_adr;
+    // Print contents of starting adr up to but not including ending adr
+    // Prints number of MEM_DUMP_SEGMENT_SIZE bytes in 1 row then increments cur adr by that amount to print next segment
+    while (curr_adr < end_adr)
     {
-        // only print when register isn't empty
-        if (memory.byte[i] == 0) continue;
-        printf("%04X %02X\n", i, memory.byte[i]);
+        printf("0x%04X  ", curr_adr);
+        for (int i = 0; i < MEM_DUMP_SEGMENT_SIZE; i++)
+            printf("%02X ", memory.byte[curr_adr + i]);
+        curr_adr = curr_adr + MEM_DUMP_SEGMENT_SIZE;
+        printf("\n");
     }
-    printf("********* MEMORY DUMPED *********\n");
 }
 
 // Print contents of register file, apart from constants

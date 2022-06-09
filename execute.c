@@ -389,6 +389,7 @@ void SRAorRRC_instr(enum SRAorRRC instr, enum SIZE bw, unsigned short DST)
 void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned short SC, unsigned short DST)
 {
     union word_byte temp = regfile[RC][SC];
+    dstnum = regfile[0][DST];
     switch (instr)
     {
         case BIT:
@@ -401,16 +402,28 @@ void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned s
         case BIS:
             // set a bit at location temp in DST register
             if (bw == word)
+            {
                 regfile[0][DST].word |= 1 << temp.word;
+                update_psw(temp.word, dstnum.word, regfile[0][DST].word, word);
+            }
             else  // set a bit at location temp in LSByte of DST register
+            {
                 regfile[0][DST].byte[0] |= 1 << temp.byte[0];
+                update_psw(temp.byte[0], dstnum.byte[0], regfile[0][DST].byte[0], byte);
+            }
             break;
         case BIC:
             // clear a bit at location temp in DST register
             if (bw == word)
+            {
                 regfile[0][DST].word &= ~(1 << temp.word);
+                update_psw(temp.word, dstnum.word, regfile[0][DST].word, word);
+            }
             else  // clear a bit at location temp in LSByte of DST register
+            {
                 regfile[0][DST].byte[0] &= ~(1 << temp.byte[0]);
+                update_psw(temp.byte[0], dstnum.byte[0], regfile[0][DST].byte[0], byte);
+            }
             break;
         default:
             printf("invalid\n");

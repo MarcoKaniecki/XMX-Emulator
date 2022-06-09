@@ -1,21 +1,36 @@
 #include "emulator.h"
 
 unsigned long CPU_CLOCK = 0;
-unsigned short breakpoint = 0xFFFF;  // default breakpoint to not interrupt program
+unsigned short breakpoint = breakpoint_default;  // default breakpoint to not interrupt program
 unsigned short custom_PC = CLEAR;  // initially custom_PC location is clear so loader gets PC location from S-Records
+
+FILE *infile;
+char srec[MAX_REC_LEN];
 
 int main()
 {
     unsigned short IR, instr;
-    char UI[MAX_USER_INPUT_LEN];
+    char UI[MAX_USER_INPUT_LEN], filename[MAX_REC_LEN];
 
-    // TODO: add argc and argv checks to open file through drag and drop
+    printf("Enter filename\n");
+    printf("> ");
+    scanf("%s", filename);
+    getchar();
+
+
+    if (filename[0] == NUL)
+    {
+        printf("Invalid filename\n");
+        return 0;
+    }
+
+    infile = fopen(filename, "r");
 
     initial_CPU_state();
 
     while (1)
     {
-        printf("\n**** XMX Emulator - User Interface *****\n");
+        printf("\n***** XMX Emulator - User Interface *****\n");
         printf("CPU clock cycles: %lu\n", CPU_CLOCK);
         printf("r   - run\n");
         printf("md  - Memory Dump\n");
@@ -42,7 +57,6 @@ int main()
                 {
                     instr = decode(IR);
                     if (instr == END_i) break;
-                    printf("passing instr number: %d\n", instr);
                     execute(instr, IR);
                 }
                 else  // CEX state is ON
@@ -84,19 +98,25 @@ int main()
             }
         }
         else if (strcmp(UI, "md") == 0)  // Memory dump
-            memory_dump();
+        {
+            unsigned short start, end;
+            printf("Specify Memory range\n");
+            printf("Format: <start_adr> <end_adr>\n");
+            printf("> ");
+            scanf("%4hX %4hX", &start, &end);
+            printf("\n");
+            memory_dump(start, end);
+        }
         else if (strcmp(UI, "drf") == 0)  // display register file
             display_regfile();
         else if (strcmp(UI, "dw") == 0)  // display PSW
             printf("PSW - C:%d V:%d Z:%d N:%d\n", PSW.C, PSW.V, PSW.Z, PSW.N);
         else if (strcmp(UI, "sb") == 0)  // set breakpoint
         {
-            // TODO: currently not working because loader is overwriting breakpoint location when running program again
             printf("Specify breakpoint location\n");
             printf("> ");
             scanf("%hX", &breakpoint);
             getchar();
-
         }
         else if (strcmp(UI, "sp") == 0)  // set custom PC
         {
