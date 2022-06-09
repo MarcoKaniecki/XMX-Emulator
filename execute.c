@@ -101,8 +101,7 @@ void execute(INSTRUCTIONS inst, unsigned short full_inst)
                      EXTR_BIT(full_inst, Bit7), EXTR_WB(full_inst), EXTR_SC(full_inst), ST_ADR(full_inst));
             break;
         case MOVx_i:
-            printf("MOVx instr: %X\n", full_inst);
-            printf("MOVx instr num: %d\n", MOVx(full_inst));
+            printf("MOVx\n");
             MOVx_instr(MOVx(full_inst), EXTR_DRA(full_inst, Bit11), B(full_inst), DEST(full_inst));
             break;
         case LDR_i:
@@ -183,7 +182,6 @@ void BL_instr(unsigned short OFF)
 {
     LR = PC;
     PC = PC + (sign_ext(OFF,Bit12) << 1);
-    printf("sign ext offset: %d, %x\n", sign_ext(OFF,Bit12) << 1, sign_ext(OFF,Bit12) << 1);
 }
 
 // unconditional branch
