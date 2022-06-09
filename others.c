@@ -38,7 +38,7 @@ unsigned short extract_bits(unsigned short value, unsigned short signbit)
 }
 // **************************************************************
 
-// print out anything in memory that's not zero
+// print out anything in memory from a given starting adr to end adr
 void memory_dump(unsigned short start_adr, unsigned short end_adr)
 {
     unsigned short curr_adr = start_adr;
