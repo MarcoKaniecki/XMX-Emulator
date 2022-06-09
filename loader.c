@@ -16,7 +16,7 @@ int loader()
     unsigned int count, ahi, alo, byte;
     unsigned short address;
 
-    infile = fopen("A1test.xme", "r");
+    infile = fopen("ArrayInit.xme", "r");
 
     while(fgets(srec, MAX_REC_LEN, infile) > 0)
     {
