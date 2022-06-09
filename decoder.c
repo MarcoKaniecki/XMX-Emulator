@@ -33,7 +33,6 @@ INSTRUCTIONS decode(unsigned short inst)
             }
             printf("Illegal instruction\n");
             break;
-
         case 4:  // MOVL, MOVLZ
         case 5:  // MOVLS, MOVH
             printf("MOVx\n");

@@ -103,9 +103,6 @@
 		<Unit filename="/Users/mk/Desktop/XMX-Emulator/psw.c">
 			<Option target="XMX_Emulator"/>
 		</Unit>
-		<Unit filename="/Users/mk/Desktop/XMX-Emulator/register_file.c">
-			<Option target="XMX_Emulator"/>
-		</Unit>
 		<Unit filename="/Users/mk/Desktop/XMX-Emulator/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

@@ -9,6 +9,5 @@ add_executable(XMX_Emulator
         emulator.h
         bus.c fetch.c
         decoder.c
-        register_file.c
         execute.c
         psw.c others.c)

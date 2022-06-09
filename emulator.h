@@ -8,12 +8,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #define MAX_USER_INPUT_LEN 32
 #define MAX_REC_LEN 128
 #define BIT7(x) (((x) >> 7) & 1)
 #define BIT15(x) (((x) >> 15) & 1)
 
+#define BP regfile[0][12].word
 #define LR regfile[0][13].word
 #define SP regfile[0][14].word
 #define PC regfile[0][15].word
@@ -24,12 +26,9 @@
 #define OFF_state 0
 #define FALSE 0
 #define CLEAR 0
-#define END 0
 
 #define BREAK_INSTRUCTION 0x6000
 
-
-extern unsigned long CPU_CLOCK;
 // *********** Initial CPU state **********
 #define PC_default 0x0800  // see p.81 in XMX Design Document
 #define SP_default 0x0800
@@ -58,9 +57,6 @@ extern unsigned long CPU_CLOCK;
 #define MASK001X(x) (((x) >> 12) & 1)
 #define MOVx(x)  (((x) >> 12) & 0x03)
 
-enum OPCODE10XX {MOVL, MOVLZ, MOVLS, MOVH};
-enum OPCODE0011 {SRAorRRC, ADD, ADDC, SUB, SUBC, CMP, XOR, AND, OR, BIT, BIS, BIC, MOV, MOV_SRA, SWAP, SWAP_SRA};
-
 extern short decode_LD_ST(unsigned short inst);
 extern short decode_LDR_STR(unsigned short inst);
 extern short decode_BR_to_CLRCC(unsigned short inst);
@@ -72,12 +68,15 @@ enum SIZE { word, byte };
 enum BITS { Bit0, Bit1, Bit2, Bit3, Bit4, Bit5, Bit6, Bit7, Bit8, Bit9, Bit10, Bit11, Bit12, Bit13, Bit14, Bit15 };
 enum SRAorRRC { SRA, RRC };
 enum LD_ST_ADDRESSING {direct, indexed};
+enum OPCODE10XX {MOVL, MOVLZ, MOVLS, MOVH};
+enum OPCODE0011 {SRAorRRC, ADD, ADDC, SUB, SUBC, CMP, XOR, AND, OR, BIT, BIS, BIC, MOV, MOV_SRA, SWAP, SWAP_SRA};
+enum CEX_INSTR { EQ, NE, CS_HS, CC_LO, MI, PL, VS, VC, HI, LS, GE, LT, GT, LE, TR, FL };
+
 typedef enum INSTRUCTIONS { BL_i, BR_i, CEX_i, SWPB_i, SXT_i, SRAorRRC_i, ADD_i, ADDC_i, SUB_i, SUBC_i, CMP_i, XOR_i, AND_i, OR_i,
         BIT_i, BIS_i, BIC_i, MOV_i, SWAP_i, LD_i, ST_i, MOVx_i, LDR_i, STR_i, END_i } INSTRUCTIONS;
 
-enum CEX_INSTR { EQ, NE, CS_HS, CC_LO, MI, PL, VS, VC, HI, LS, GE, LT, GT, LE, TR, FL };
-
 extern INSTRUCTIONS decode(unsigned short inst);
+
 
 typedef struct psw
 {
@@ -87,6 +86,8 @@ typedef struct psw
     unsigned short C:1;
 
 } psw;
+
+extern psw PSW;
 
 typedef struct cex
 {
@@ -102,8 +103,9 @@ union mem
 {
     unsigned char byte[0x10000];
     unsigned short word[0x8000];
-} MEM;
+};
 
+extern union mem memory;
 
 union word_byte
 {
@@ -112,9 +114,6 @@ union word_byte
 };
 
 extern union word_byte srcnum, dstnum;
-
-extern union mem memory;
-
 extern union word_byte regfile[2][16];
 
 extern unsigned short breakpoint;
@@ -123,19 +122,16 @@ extern unsigned short custom_PC;
 extern unsigned carry[2][2][2];
 extern unsigned overflow[2][2][2];
 
-
-extern psw PSW;
+extern unsigned long CPU_CLOCK;
 
 extern void execute(INSTRUCTIONS inst, unsigned short full_inst);
 
-extern void set_default_breakpoint(unsigned short adr);
+extern void initial_CPU_state();  // when program starts initial values for PC, SP and PSW are set
 extern void display_regfile();
-extern void modify_regfile();
-
-extern void bus(unsigned short mar, unsigned short *mbr, enum ACTION rw, enum SIZE bw);
-extern int loader();
+extern int loader();  // loads S-Records into memory
+extern int fetch();  // fetches data/instruction from memory
 extern void memory_dump();  // show contents of memory
-extern int fetch();
+extern void bus(unsigned short mar, unsigned short *mbr, enum ACTION rw, enum SIZE bw);  // used to access main memory
 extern void update_psw(unsigned short src, unsigned short dst, unsigned short res, unsigned short wb);
 
 // execute functions

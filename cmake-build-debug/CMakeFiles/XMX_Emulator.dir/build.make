@@ -139,24 +139,10 @@ CMakeFiles/XMX_Emulator.dir/decoder.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/XMX_Emulator.dir/decoder.c.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/mk/Desktop/XMX-Emulator/decoder.c -o CMakeFiles/XMX_Emulator.dir/decoder.c.s
 
-CMakeFiles/XMX_Emulator.dir/register_file.c.o: CMakeFiles/XMX_Emulator.dir/flags.make
-CMakeFiles/XMX_Emulator.dir/register_file.c.o: ../register_file.c
-CMakeFiles/XMX_Emulator.dir/register_file.c.o: CMakeFiles/XMX_Emulator.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/mk/Desktop/XMX-Emulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/XMX_Emulator.dir/register_file.c.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/XMX_Emulator.dir/register_file.c.o -MF CMakeFiles/XMX_Emulator.dir/register_file.c.o.d -o CMakeFiles/XMX_Emulator.dir/register_file.c.o -c /Users/mk/Desktop/XMX-Emulator/register_file.c
-
-CMakeFiles/XMX_Emulator.dir/register_file.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/XMX_Emulator.dir/register_file.c.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/mk/Desktop/XMX-Emulator/register_file.c > CMakeFiles/XMX_Emulator.dir/register_file.c.i
-
-CMakeFiles/XMX_Emulator.dir/register_file.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/XMX_Emulator.dir/register_file.c.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/mk/Desktop/XMX-Emulator/register_file.c -o CMakeFiles/XMX_Emulator.dir/register_file.c.s
-
 CMakeFiles/XMX_Emulator.dir/execute.c.o: CMakeFiles/XMX_Emulator.dir/flags.make
 CMakeFiles/XMX_Emulator.dir/execute.c.o: ../execute.c
 CMakeFiles/XMX_Emulator.dir/execute.c.o: CMakeFiles/XMX_Emulator.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/mk/Desktop/XMX-Emulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/XMX_Emulator.dir/execute.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/mk/Desktop/XMX-Emulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/XMX_Emulator.dir/execute.c.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/XMX_Emulator.dir/execute.c.o -MF CMakeFiles/XMX_Emulator.dir/execute.c.o.d -o CMakeFiles/XMX_Emulator.dir/execute.c.o -c /Users/mk/Desktop/XMX-Emulator/execute.c
 
 CMakeFiles/XMX_Emulator.dir/execute.c.i: cmake_force
@@ -170,7 +156,7 @@ CMakeFiles/XMX_Emulator.dir/execute.c.s: cmake_force
 CMakeFiles/XMX_Emulator.dir/psw.c.o: CMakeFiles/XMX_Emulator.dir/flags.make
 CMakeFiles/XMX_Emulator.dir/psw.c.o: ../psw.c
 CMakeFiles/XMX_Emulator.dir/psw.c.o: CMakeFiles/XMX_Emulator.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/mk/Desktop/XMX-Emulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/XMX_Emulator.dir/psw.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/mk/Desktop/XMX-Emulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/XMX_Emulator.dir/psw.c.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/XMX_Emulator.dir/psw.c.o -MF CMakeFiles/XMX_Emulator.dir/psw.c.o.d -o CMakeFiles/XMX_Emulator.dir/psw.c.o -c /Users/mk/Desktop/XMX-Emulator/psw.c
 
 CMakeFiles/XMX_Emulator.dir/psw.c.i: cmake_force
@@ -184,7 +170,7 @@ CMakeFiles/XMX_Emulator.dir/psw.c.s: cmake_force
 CMakeFiles/XMX_Emulator.dir/others.c.o: CMakeFiles/XMX_Emulator.dir/flags.make
 CMakeFiles/XMX_Emulator.dir/others.c.o: ../others.c
 CMakeFiles/XMX_Emulator.dir/others.c.o: CMakeFiles/XMX_Emulator.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/mk/Desktop/XMX-Emulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/XMX_Emulator.dir/others.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/mk/Desktop/XMX-Emulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/XMX_Emulator.dir/others.c.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/XMX_Emulator.dir/others.c.o -MF CMakeFiles/XMX_Emulator.dir/others.c.o.d -o CMakeFiles/XMX_Emulator.dir/others.c.o -c /Users/mk/Desktop/XMX-Emulator/others.c
 
 CMakeFiles/XMX_Emulator.dir/others.c.i: cmake_force
@@ -202,7 +188,6 @@ XMX_Emulator_OBJECTS = \
 "CMakeFiles/XMX_Emulator.dir/bus.c.o" \
 "CMakeFiles/XMX_Emulator.dir/fetch.c.o" \
 "CMakeFiles/XMX_Emulator.dir/decoder.c.o" \
-"CMakeFiles/XMX_Emulator.dir/register_file.c.o" \
 "CMakeFiles/XMX_Emulator.dir/execute.c.o" \
 "CMakeFiles/XMX_Emulator.dir/psw.c.o" \
 "CMakeFiles/XMX_Emulator.dir/others.c.o"
@@ -215,13 +200,12 @@ XMX_Emulator: CMakeFiles/XMX_Emulator.dir/loader.c.o
 XMX_Emulator: CMakeFiles/XMX_Emulator.dir/bus.c.o
 XMX_Emulator: CMakeFiles/XMX_Emulator.dir/fetch.c.o
 XMX_Emulator: CMakeFiles/XMX_Emulator.dir/decoder.c.o
-XMX_Emulator: CMakeFiles/XMX_Emulator.dir/register_file.c.o
 XMX_Emulator: CMakeFiles/XMX_Emulator.dir/execute.c.o
 XMX_Emulator: CMakeFiles/XMX_Emulator.dir/psw.c.o
 XMX_Emulator: CMakeFiles/XMX_Emulator.dir/others.c.o
 XMX_Emulator: CMakeFiles/XMX_Emulator.dir/build.make
 XMX_Emulator: CMakeFiles/XMX_Emulator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/mk/Desktop/XMX-Emulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking C executable XMX_Emulator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/mk/Desktop/XMX-Emulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking C executable XMX_Emulator"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/XMX_Emulator.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

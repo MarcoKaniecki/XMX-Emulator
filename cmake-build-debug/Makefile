@@ -321,30 +321,6 @@ psw.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/psw.c.s
 .PHONY : psw.c.s
 
-register_file.o: register_file.c.o
-.PHONY : register_file.o
-
-# target to build an object file
-register_file.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/register_file.c.o
-.PHONY : register_file.c.o
-
-register_file.i: register_file.c.i
-.PHONY : register_file.i
-
-# target to preprocess a source file
-register_file.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/register_file.c.i
-.PHONY : register_file.c.i
-
-register_file.s: register_file.c.s
-.PHONY : register_file.s
-
-# target to generate assembly for a file
-register_file.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/XMX_Emulator.dir/build.make CMakeFiles/XMX_Emulator.dir/register_file.c.s
-.PHONY : register_file.c.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -378,9 +354,6 @@ help:
 	@echo "... psw.o"
 	@echo "... psw.i"
 	@echo "... psw.s"
-	@echo "... register_file.o"
-	@echo "... register_file.i"
-	@echo "... register_file.s"
 .PHONY : help
 
 

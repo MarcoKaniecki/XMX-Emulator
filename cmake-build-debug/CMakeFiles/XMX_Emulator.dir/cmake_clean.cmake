@@ -15,8 +15,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/XMX_Emulator.dir/others.c.o.d"
   "CMakeFiles/XMX_Emulator.dir/psw.c.o"
   "CMakeFiles/XMX_Emulator.dir/psw.c.o.d"
-  "CMakeFiles/XMX_Emulator.dir/register_file.c.o"
-  "CMakeFiles/XMX_Emulator.dir/register_file.c.o.d"
   "XMX_Emulator"
   "XMX_Emulator.pdb"
 )

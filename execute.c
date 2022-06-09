@@ -399,6 +399,7 @@ void SRAorRRC_instr(enum SRAorRRC instr, enum SIZE bw, unsigned short DST)
 
     if (instr == SRA)
     {
+        printf("SRA\n");
         PSW.C = EXTR_BIT(regfile[0][DST].word, Bit0);
         if (bw == word)
         {
@@ -413,6 +414,7 @@ void SRAorRRC_instr(enum SRAorRRC instr, enum SIZE bw, unsigned short DST)
     }
     else  // RRC
     {
+        printf("RRC\n");
         temp.word = PSW.C;
         PSW.C = EXTR_BIT(regfile[0][DST].word, Bit0);
         if (bw == word)
@@ -435,43 +437,30 @@ void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned s
     switch (instr)
     {
         case BIT:
-            // check if bit is 1 or 0, assign status to PSW.Z
+            // checks if DST bit is SET or not by shifting a 1 to the desired bit to check and ANDing it with the value to check
             if (bw == word)
-            {
-                // checks if DST bit is SET or not by shifting a 1 to the desired bit to check and ANDing it with the value to check
-                PSW.Z = (regfile[0][DST].word & (1 << temp.word));
-            }
+                PSW.Z = ((regfile[0][DST].word & (1 << temp.word)) == 0);
             else
-            {
-                PSW.Z = (regfile[0][DST].byte[0] & (1 << temp.byte[0]));
-            }
+                PSW.Z = ((regfile[0][DST].byte[0] & (1 << temp.byte[0])) == 0);
             break;
         case BIS:
             // set a bit at location temp in DST register
             if (bw == word)
-            {
                 regfile[0][DST].word |= 1 << temp.word;
-            }
             else  // set a bit at location temp in LSByte of DST register
-            {
                 regfile[0][DST].byte[0] |= 1 << temp.byte[0];
-            }
             break;
         case BIC:
             // clear a bit at location temp in DST register
             if (bw == word)
-            {
                 regfile[0][DST].word &= ~(1 << temp.word);
-            }
             else  // clear a bit at location temp in LSByte of DST register
-            {
                 regfile[0][DST].byte[0] &= ~(1 << temp.byte[0]);
-            }
             break;
         default:
             printf("invalid\n");
     }
-    // TODO: update PSW
+    // TODO: update PSW for BIS and BIC
     // update_psw();
 }
 

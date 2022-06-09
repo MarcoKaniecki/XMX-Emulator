@@ -16,7 +16,6 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/mk/Desktop/XMX-Emulator/main.c" "CMakeFiles/XMX_Emulator.dir/main.c.o" "gcc" "CMakeFiles/XMX_Emulator.dir/main.c.o.d"
   "/Users/mk/Desktop/XMX-Emulator/others.c" "CMakeFiles/XMX_Emulator.dir/others.c.o" "gcc" "CMakeFiles/XMX_Emulator.dir/others.c.o.d"
   "/Users/mk/Desktop/XMX-Emulator/psw.c" "CMakeFiles/XMX_Emulator.dir/psw.c.o" "gcc" "CMakeFiles/XMX_Emulator.dir/psw.c.o.d"
-  "/Users/mk/Desktop/XMX-Emulator/register_file.c" "CMakeFiles/XMX_Emulator.dir/register_file.c.o" "gcc" "CMakeFiles/XMX_Emulator.dir/register_file.c.o.d"
   )
 
 # Targets to which this target links.

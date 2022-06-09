@@ -1,8 +1,8 @@
 #include "emulator.h"
 
 unsigned long CPU_CLOCK = 0;
-unsigned short breakpoint = 0xFFFF;
-unsigned short custom_PC = CLEAR;
+unsigned short breakpoint = 0xFFFF;  // default breakpoint to not interrupt program
+unsigned short custom_PC = CLEAR;  // initially custom_PC location is clear so loader gets PC location from S-Records
 
 int main()
 {
@@ -11,12 +11,7 @@ int main()
 
     // TODO: add argc and argv checks to open file through drag and drop
 
-    PC = PC_default;
-    SP = SP_default;
-    PSW.C = CLEAR;
-    PSW.N = CLEAR;
-    PSW.V = CLEAR;
-    PSW.Z = CLEAR;
+    initial_CPU_state();
 
     while (1)
     {
@@ -64,29 +59,28 @@ int main()
                         {
                             if (CEX.F_count > 0)
                                 CEX.F_count--;
-                            if (CEX.T_count == 0 && CEX.F_count == 0)
-                                CEX.state = FALSE;
                         }
+                        if (CEX.T_count == 0 && CEX.F_count == 0)
+                            CEX.state = FALSE;
                     }
                     else  // CEX condition is FALSE
                     {
-                        if (CEX.F_count > 0)  // dec and exec num of false count
+                        if (CEX.T_count > 0)  // fetch and ignore
+                        {
+                            CEX.T_count--;
+                        }
+                        else  // fetch and execute
                         {
                             instr = decode(IR);
                             execute(instr, IR);
                             CEX.F_count--;
                         }
-                        else  // fetch but ignore exec num of true count
-                        {
-                            if (CEX.T_count > 0)
-                                CEX.T_count--;
-                            if (CEX.T_count == 0 && CEX.F_count == 0)
-                                CEX.state = FALSE;
-                        }
-
+                        if (CEX.T_count == 0 && CEX.F_count == 0)
+                            CEX.state = FALSE;
                     }
                 }
                 display_regfile();
+                printf("PSW -> C:%d V:%d Z:%d N:%d\n", PSW.C, PSW.V, PSW.Z, PSW.N);
             }
         }
         else if (strcmp(UI, "md") == 0)  // Memory dump
