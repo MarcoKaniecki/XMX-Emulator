@@ -11,12 +11,11 @@ char srec[MAX_REC_LEN];
 int loader()
 {
     // program that reads and decodes s-records
-    unsigned int rec_chksum;
+    unsigned int rec_chksum, count, ahi, alo, byte;
     unsigned char type, type_num, checksum;
-    unsigned int count, ahi, alo, byte;
     unsigned short address;
 
-    infile = fopen("ArrayInit.xme", "r");
+    infile = fopen("A1test.xme", "r");
 
     while(fgets(srec, MAX_REC_LEN, infile) > 0)
     {

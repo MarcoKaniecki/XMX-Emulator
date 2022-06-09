@@ -128,88 +128,46 @@ void CEX_instr(unsigned short C, unsigned short T, unsigned short F)
     switch(C)
     {
         case EQ:
-            if(PSW.Z == SET)
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = (PSW.Z == SET)? TRUE : FALSE;
             break;
         case NE:
-            if(PSW.Z == CLEAR)
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = (PSW.Z == CLEAR)? TRUE : FALSE;
             break;
         case CS_HS:
-            if(PSW.C == SET)
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = (PSW.C == SET)? TRUE : FALSE;
             break;
         case CC_LO:
-            if(PSW.C == CLEAR)
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = (PSW.C == CLEAR)? TRUE : FALSE;
             break;
         case MI:
-            if(PSW.N == SET)
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = (PSW.N == SET)? TRUE : FALSE;
             break;
         case PL:
-            if(PSW.N == CLEAR)
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = (PSW.N == CLEAR)? TRUE : FALSE;
             break;
         case VS:
-            if(PSW.V == SET)
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = (PSW.V == SET)? TRUE : FALSE;
             break;
         case VC:
-            if(PSW.V == CLEAR)
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = (PSW.V == CLEAR)? TRUE : FALSE;
             break;
         case HI:
-            if(PSW.C == SET && PSW.Z == CLEAR)
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = (PSW.C == SET && PSW.Z == CLEAR)? TRUE : FALSE;
             break;
         case LS:
-            if(PSW.C == CLEAR && PSW.Z == SET)
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = (PSW.C == CLEAR && PSW.Z == SET)? TRUE : FALSE;
             break;
         case GE:
-            if(PSW.N == PSW.V)
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = (PSW.N == PSW.V)? TRUE : FALSE;
             break;
         case LT:
-            if(PSW.N != PSW.V)
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = (PSW.N != PSW.V)? TRUE : FALSE;
             break;
         case GT:
-            if((PSW.Z == CLEAR) && (PSW.N == PSW.V))
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = ((PSW.Z == CLEAR) && (PSW.N == PSW.V))? TRUE : FALSE;
             break;
         case LE:
-            if((PSW.Z == SET) && (PSW.N != PSW.V))
-                CEX.TorF = TRUE;
-            else
-                CEX.TorF = FALSE;
+            CEX.TorF = ((PSW.Z == SET) && (PSW.N != PSW.V))? TRUE : FALSE;
             break;
         case TR:
         case FL:
@@ -342,7 +300,6 @@ void SWAP_instr(unsigned short SRA, unsigned short DRA, unsigned short SRC, unsi
 void MOVx_instr(unsigned short instr, unsigned short DRA, unsigned short B, unsigned short DST)
 {
     unsigned short DST_reg = DST | (DRA << 3);
-    printf("dst_reg = %d\n", DST_reg);
 
     switch (instr)
     {
@@ -472,15 +429,12 @@ void LDR_STR_instr(unsigned short instr, unsigned short SDRA ,unsigned short OFF
     switch (instr)
     {
         case 0: // LDR
-            printf("LDR \n");
+            printf("LDR\n");
             // Address reg is the SRC reg for LDR
             EA = (regfile[0][SRC | 0x08].word) + sign_ext(OFF, Bit4);
-            printf("sign ext: %d\n", sign_ext(OFF, Bit4));
             if (bw == word)
             {
-                printf("LDR word at addr: %X\n", EA);
                 bus(EA, &mbr, read, word);
-                printf("into reg: %d\n", (DST | (SDRA << 3)));
                 regfile[0][DST | (SDRA << 3)].word = mbr;
             }
             else  // byte
@@ -519,9 +473,7 @@ void LD_instr(unsigned short DI, unsigned short SDRA, unsigned short PRPO, unsig
 
     // Effective address pre increment
     if (DI == direct)
-    {
         EA = regfile[0][ADR].word;
-    }
     else  // indexed
     {
         if (PRPO == 0)  // pre
@@ -584,9 +536,7 @@ void ST_instr(unsigned short DI, unsigned short SDRA, unsigned short PRPO, unsig
 
     // Effective address pre increment
     if (DI == direct)
-    {
         EA = regfile[0][ADR].word;
-    }
     else  // indexed
     {
         if (PRPO == 0)  // pre increment/decrement
