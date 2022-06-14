@@ -9,6 +9,7 @@ char srec[MAX_REC_LEN];
 
 int main()
 {
+    // im on Mac so Drag and Drop doesn't work for me, therefore user has to input filename
     unsigned short IR, instr;
     char UI[MAX_USER_INPUT_LEN], filename[MAX_REC_LEN];
 
@@ -16,7 +17,6 @@ int main()
     printf("> ");
     scanf("%s", filename);
     getchar();
-
 
     if (filename[0] == NUL)
     {
@@ -43,7 +43,6 @@ int main()
         printf("> ");
         scanf("%s", UI);
         getchar();
-
 
         if (strcmp(UI, "r") == 0)  // run
         {

@@ -347,7 +347,6 @@ void SXT_instr(unsigned short DST)
 
 // SRA - shift DST data register right one bit arithmetic keeping sign
 // RRC - rotate DST data register right by 1
-// TODO: more comments
 void SRAorRRC_instr(enum SRAorRRC instr, enum SIZE bw, unsigned short DST)
 {
     union word_byte temp;
@@ -404,12 +403,12 @@ void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned s
             if (bw == word)
             {
                 regfile[0][DST].word |= 1 << temp.word;
-                update_psw(temp.word, dstnum.word, regfile[0][DST].word, word);
+                update_psw_BIS_BIC(regfile[0][DST].word, word);
             }
             else  // set a bit at location temp in LSByte of DST register
             {
                 regfile[0][DST].byte[0] |= 1 << temp.byte[0];
-                update_psw(temp.byte[0], dstnum.byte[0], regfile[0][DST].byte[0], byte);
+                update_psw_BIS_BIC(regfile[0][DST].byte[0], byte);
             }
             break;
         case BIC:
@@ -417,19 +416,17 @@ void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, unsigned s
             if (bw == word)
             {
                 regfile[0][DST].word &= ~(1 << temp.word);
-                update_psw(temp.word, dstnum.word, regfile[0][DST].word, word);
+                update_psw_BIS_BIC(regfile[0][DST].word, word);
             }
             else  // clear a bit at location temp in LSByte of DST register
             {
                 regfile[0][DST].byte[0] &= ~(1 << temp.byte[0]);
-                update_psw(temp.byte[0], dstnum.byte[0], regfile[0][DST].byte[0], byte);
+                update_psw_BIS_BIC(regfile[0][DST].byte[0], byte);
             }
             break;
         default:
             printf("invalid\n");
     }
-    // TODO: update PSW for BIS and BIC
-    // update_psw();
 }
 
 // Load relative from SRC address register + offset to DST (data or address) register
@@ -561,10 +558,8 @@ void ST_instr(unsigned short DI, unsigned short SDRA, unsigned short PRPO, unsig
             }
             else  // decrement
             {
-                printf("got to pre decrement\n");
                 if (bw == word)
                 {
-                    printf("got to pre decrement by word\n");
                     regfile[0][ADR].word = regfile[0][ADR].word - 2;
                 }
                 else

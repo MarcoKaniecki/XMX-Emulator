@@ -44,7 +44,7 @@ void memory_dump(unsigned short start_adr, unsigned short end_adr)
     unsigned short curr_adr = start_adr;
     // Print contents of starting adr up to but not including ending adr
     // Prints number of MEM_DUMP_SEGMENT_SIZE bytes in 1 row then increments cur adr by that amount to print next segment
-    while (curr_adr < end_adr)
+    while (curr_adr <= end_adr)
     {
         printf("0x%04X  ", curr_adr);
         for (int i = 0; i < MEM_DUMP_SEGMENT_SIZE; i++)

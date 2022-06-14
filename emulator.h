@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <signal.h>
 
 #define MAX_USER_INPUT_LEN 32
 #define MAX_REC_LEN 128
@@ -34,7 +33,7 @@
 #define SP_default 0x0800
 
 #define breakpoint_default 0xFFFF
-// *********** USED IN DECODER ************
+
 // EXTR stands for extract
 #define EXTR_BIT(instr, loc) (((instr) >> (loc)) & 1)  // Extract a bit at a given location
 #define EXTR_RC(x) (((x) >> 7) & 1)
@@ -131,10 +130,11 @@ extern void execute(INSTRUCTIONS inst, unsigned short full_inst);
 extern void initial_CPU_state();  // when program starts initial values for PC, SP and PSW are set
 extern void display_regfile();
 extern int loader();  // loads S-Records into memory
-extern int fetch();  // fetches data/instruction from memory
+extern unsigned short fetch();  // fetches data/instruction from memory
 extern void memory_dump(unsigned short start_adr, unsigned short end_adr);  // show contents of memory
 extern void bus(unsigned short mar, unsigned short *mbr, enum ACTION rw, enum SIZE bw);  // used to access main memory
 extern void update_psw(unsigned short src, unsigned short dst, unsigned short res, unsigned short wb);
+extern void update_psw_BIS_BIC(unsigned short res, unsigned short wb);
 
 // execute functions
 extern void BL_instr(unsigned short OFF);

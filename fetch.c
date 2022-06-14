@@ -4,7 +4,7 @@
 #include "emulator.h"
 
 // return instr/data from Effective address
-int fetch()
+unsigned short fetch()
 {
     unsigned short mbr;
 
