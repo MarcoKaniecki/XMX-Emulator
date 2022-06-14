@@ -1,6 +1,6 @@
 CMakeFiles/XMX_Emulator.dir/loader.c.o: \
-  /Users/marcokaniecki/Desktop/XMX-Emulator/loader.c \
-  /Users/marcokaniecki/Desktop/XMX-Emulator/emulator.h \
+  /Users/mk/Desktop/XMX-Emulator/loader.c \
+  /Users/mk/Desktop/XMX-Emulator/emulator.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/usr/include/stdio.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/usr/include/_stdio.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/usr/include/sys/cdefs.h \

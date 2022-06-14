@@ -131,7 +131,7 @@ extern void initial_CPU_state();  // when program starts initial values for PC, 
 extern void display_regfile();
 extern int loader();  // loads S-Records into memory
 extern unsigned short fetch();  // fetches data/instruction from memory
-extern void memory_dump(unsigned short start_adr, unsigned short end_adr);  // show contents of memory
+extern void memory_dump(unsigned int start_adr, unsigned int end_adr);  // show contents of memory
 extern void bus(unsigned short mar, unsigned short *mbr, enum ACTION rw, enum SIZE bw);  // used to access main memory
 extern void update_psw(unsigned short src, unsigned short dst, unsigned short res, unsigned short wb);
 extern void update_psw_BIS_BIC(unsigned short res, unsigned short wb);

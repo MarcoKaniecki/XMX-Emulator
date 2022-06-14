@@ -98,11 +98,11 @@ int main()
         }
         else if (strcmp(UI, "md") == 0)  // Memory dump
         {
-            unsigned short start, end;
+            unsigned int start, end;
             printf("Specify Memory range\n");
             printf("Format: <start_adr> <end_adr>\n");
             printf("> ");
-            scanf("%4hX %4hX", &start, &end);
+            scanf("%X %X", &start, &end);
             printf("\n");
             memory_dump(start, end);
         }

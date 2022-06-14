@@ -39,9 +39,9 @@ unsigned short extract_bits(unsigned short value, unsigned short signbit)
 // **************************************************************
 
 // print out anything in memory from a given starting adr to end adr
-void memory_dump(unsigned short start_adr, unsigned short end_adr)
+void memory_dump(unsigned int start_adr, unsigned int end_adr)
 {
-    unsigned short curr_adr = start_adr;
+    unsigned int curr_adr = start_adr;
     // Print contents of starting adr up to but not including ending adr
     // Prints number of MEM_DUMP_SEGMENT_SIZE bytes in 1 row then increments cur adr by that amount to print next segment
     while (curr_adr <= end_adr)

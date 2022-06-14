@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/marcokaniecki/Desktop/XMX-Emulator/cmake-build-debug",
-		"source" : "/Users/marcokaniecki/Desktop/XMX-Emulator"
+		"build" : "/Users/mk/Desktop/XMX-Emulator/cmake-build-debug",
+		"source" : "/Users/mk/Desktop/XMX-Emulator"
 	},
 	"version" : 
 	{

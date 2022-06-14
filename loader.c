@@ -69,8 +69,8 @@ int loader()
 
             if (checksum != 0xff)
             {
-                // printf("bad checksum %s", srec);
-                continue;
+                printf("bad checksum %s", srec);
+                // continue;
             }
             printf("\n");
         }
@@ -93,7 +93,7 @@ int loader()
 
             if ((checksum & 0x0F) != 0x0F)
             {
-                // printf("bad checksum: %s", srec);
+                printf("bad checksum: %s", srec);
                 // continue;
             }
         }
