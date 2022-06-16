@@ -1,3 +1,4 @@
+// sign extension, memdump, display register file and set initial cpu states
 #include "emulator.h"
 
 union word_byte regfile[2][16] = {0, 0, 0, 0, 0, 0, 0, 0, 0,

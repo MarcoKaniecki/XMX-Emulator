@@ -1,5 +1,5 @@
+// decoder
 #include "emulator.h"
-
 
 INSTRUCTIONS decode(unsigned short inst)
 {

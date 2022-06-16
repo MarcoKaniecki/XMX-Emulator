@@ -1,3 +1,4 @@
+// main.c - handles user interaction
 #include "emulator.h"
 
 unsigned long CPU_CLOCK = 0;
@@ -18,10 +19,10 @@ int main()
     scanf("%s", filename);
     getchar();
 
-    if (filename[0] == NUL)
+    if (fopen(filename, "r") == 0)
     {
-        printf("Invalid filename\n");
-        return 0;
+        printf("Error opening >%s<\n", filename);
+        return -1;
     }
 
     infile = fopen(filename, "r");

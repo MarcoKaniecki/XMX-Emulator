@@ -1,6 +1,7 @@
 //
 // Created by Marco Kaniecki on 2022-06-02.
 //
+// emulator.h
 
 #ifndef XMX_EMULATOR_EMULATOR_H
 #define XMX_EMULATOR_EMULATOR_H
@@ -19,13 +20,14 @@
 #define SP regfile[0][14].word
 #define PC regfile[0][15].word
 
-#define SET 1
-#define TRUE 1
-#define ON_state 1
-#define OFF_state 0
-#define FALSE 0
-#define CLEAR 0
-#define NUL 0
+#define SET         1
+#define TRUE        1
+#define ON_state    1
+#define OFF_state   0
+#define FALSE       0
+#define CLEAR       0
+#define NUL         0
+#define LF          10
 #define MEM_DUMP_SEGMENT_SIZE 16
 
 // *********** Initial CPU state **********
