@@ -29,7 +29,7 @@
 #define MEM_DUMP_SEGMENT_SIZE 16
 
 // *********** Initial CPU state **********
-#define PC_default 0x0800  // see p.81 in XMX Design Document
+#define PC_default 0  // on p.81 in XMX Design Document it says 0x800, however in A1 debugger notes it says 0
 #define SP_default 0x0800
 
 #define breakpoint_default 0xFFFF

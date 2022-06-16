@@ -50,7 +50,6 @@ int main()
             loader();
             while (PC != breakpoint)
             {
-                printf("\nCLOCK: %lu\n", CPU_CLOCK);
                 IR = fetch();
                 if (CEX.state == OFF_state)
                 {
@@ -92,8 +91,6 @@ int main()
                             CEX.state = FALSE;
                     }
                 }
-                display_regfile();
-                printf("PSW -> C:%d V:%d Z:%d N:%d\n", PSW.C, PSW.V, PSW.Z, PSW.N);
             }
         }
         else if (strcmp(UI, "md") == 0)  // Memory dump

@@ -4,25 +4,21 @@
 INSTRUCTIONS decode(unsigned short inst)
 {
     CPU_CLOCK++;
-
-    printf("Decoding... %04X  case: %d -> ", inst, MSB3(inst));
+    // printf("Decoding... %04X  case: %d -> ", inst, MSB3(inst));
 
     // look at 3 most significant bits first
     switch (MSB3(inst))
     {
         case 0:  // BL
-            printf("BL\n");
             return BL_i;
             break;
         case 1:  // BR ... SWAP
-            printf("BR to SWAP\n");
             if (MASK001X(inst))
                 return decode_SRA_to_SWAP(inst);
             else
                 return decode_BR_to_CLRCC(inst);
             break;
         case 2:  // LD or ST
-            printf("LD or ST\n");
             return decode_LD_ST(inst);
             break;
         case 3:
@@ -30,12 +26,10 @@ INSTRUCTIONS decode(unsigned short inst)
             break;
         case 4:  // MOVL, MOVLZ
         case 5:  // MOVLS, MOVH
-            printf("MOVx\n");
             return MOVx_i;
             break;
         case 6:  // LDR
         case 7:  // STR
-            printf("LDR or STR\n");
             return decode_LDR_STR(inst);
             break;
         default:
@@ -114,17 +108,10 @@ short decode_SRA_to_SWAP(unsigned short inst)
 short decode_LD_ST(unsigned short inst)
 {
     unsigned short LDorST = (inst >> 11) & 1;  // either SRA or DRA
-    printf("LDorST = %d\n", LDorST);
     if (LDorST == 0)  // LD
-    {
         return LD_i;
-    }
     else  // ST
-    {
-        printf("returning ST num: %d\n", ST_i);
         return ST_i;
-    }
-
 }
 
 // instruction is either LDR or STR

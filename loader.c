@@ -27,7 +27,7 @@ int loader()
         if (type != 'S' || (type_num > 2 && type_num < 9))
         {
             printf("bad type: %s", srec);
-            continue;
+            // continue;
         }
 
         sscanf(&srec[2], "%2x", &count);
@@ -37,7 +37,7 @@ int loader()
         if (count != (strlen(srec) - 6) / 2)
         {
             printf("bad count: %s", srec);
-            continue;
+            // continue;
         }
 
         sscanf(&srec[4], "%2x%2x", &ahi, &alo);
@@ -91,7 +91,7 @@ int loader()
             sscanf(&srec[pos], "%2x", &rec_chksum);
             checksum = checksum + rec_chksum;
 
-            if ((checksum & 0x0F) != 0x0F)
+            if ((checksum & 0xFF) != 0xFF || (checksum & 0x0F) != 0x0F)
             {
                 printf("bad checksum: %s", srec);
                 // continue;
@@ -116,7 +116,7 @@ int loader()
             if (custom_PC == CLEAR)
                 PC = address;  // assign program counter to starting addr
 
-            if (checksum != 0xFF)
+            if ((checksum & 0xFF) != 0xFF || (checksum & 0xF) != 0xF)
             {
                 printf("bad checksum: %s", srec);
                 // continue;

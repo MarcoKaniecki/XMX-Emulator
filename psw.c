@@ -37,8 +37,6 @@ void update_psw(unsigned short src, unsigned short dst, unsigned short res, unsi
     PSW.Z = (res == 0);
     // Negative
     PSW.N = (msbres == 1);
-
-    printf("Updated PSW - C:%d V:%d Z:%d N:%d\n", PSW.C, PSW.V, PSW.Z, PSW.N);
 }
 
 // special update psw func for BIS and BIC since having them with the rest caused an overflow to be set
@@ -59,6 +57,4 @@ void update_psw_BIS_BIC(unsigned short res, unsigned short wb)
     PSW.Z = (res == 0);
     // Negative
     PSW.N = (msbres == 1);
-
-    printf("Updated PSW Z and N - C:%d V:%d Z:%d N:%d\n", PSW.C, PSW.V, PSW.Z, PSW.N);
 }
