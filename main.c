@@ -1,3 +1,4 @@
+// main.c - handles user interaction
 #include "emulator.h"
 
 unsigned long CPU_CLOCK = 0;
@@ -18,10 +19,10 @@ int main()
     scanf("%s", filename);
     getchar();
 
-    if (filename[0] == NUL)
+    if (fopen(filename, "r") == 0)
     {
-        printf("Invalid filename\n");
-        return 0;
+        printf("Error opening >%s<\n", filename);
+        return -1;
     }
 
     infile = fopen(filename, "r");
@@ -50,7 +51,6 @@ int main()
             loader();
             while (PC != breakpoint)
             {
-                printf("\nCLOCK: %lu\n", CPU_CLOCK);
                 IR = fetch();
                 if (CEX.state == OFF_state)
                 {
@@ -92,8 +92,6 @@ int main()
                             CEX.state = FALSE;
                     }
                 }
-                display_regfile();
-                printf("PSW -> C:%d V:%d Z:%d N:%d\n", PSW.C, PSW.V, PSW.Z, PSW.N);
             }
         }
         else if (strcmp(UI, "md") == 0)  // Memory dump

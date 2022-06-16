@@ -1,6 +1,7 @@
 //
 // Created by Marco Kaniecki on 2022-06-03.
 //
+// bus.c
 #include "emulator.h"
 
 void bus(unsigned short mar, unsigned short *mbr, enum ACTION rw, enum SIZE bw)
