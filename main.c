@@ -35,10 +35,10 @@ int main()
         printf("CPU clock cycles: %lu\n", CPU_CLOCK);
         printf("r   - run\n");
         printf("md  - Memory Dump\n");
-        printf("drf - Display Register File\n");
-        printf("dw  - Display PSW\n");
-        printf("sb  - Set Breakpoint\n");
-        printf("sp  - Set PC\n");
+        printf("rf - Display Register File\n");
+        printf("w  - Display PSW\n");
+        printf("bp  - Set Breakpoint\n");
+        printf("pc  - Set PC\n");
         printf("E   - Exit Emulator\n");
 
         printf("> ");
@@ -104,18 +104,18 @@ int main()
             printf("\n");
             memory_dump(start, end);
         }
-        else if (strcmp(UI, "drf") == 0)  // display register file
+        else if (strcmp(UI, "rf") == 0)  // display register file
             display_regfile();
-        else if (strcmp(UI, "dw") == 0)  // display PSW
+        else if (strcmp(UI, "w") == 0)  // display PSW
             printf("PSW - C:%d V:%d Z:%d N:%d\n", PSW.C, PSW.V, PSW.Z, PSW.N);
-        else if (strcmp(UI, "sb") == 0)  // set breakpoint
+        else if (strcmp(UI, "bp") == 0)  // set breakpoint
         {
             printf("Specify breakpoint location\n");
             printf("> ");
             scanf("%hX", &breakpoint);
             getchar();
         }
-        else if (strcmp(UI, "sp") == 0)  // set custom PC
+        else if (strcmp(UI, "pc") == 0)  // set custom PC
         {
             printf("> ");
             scanf("%hX", &PC);
