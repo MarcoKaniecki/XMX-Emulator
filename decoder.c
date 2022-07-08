@@ -11,31 +11,43 @@ INSTRUCTIONS decode(unsigned short inst)
     {
         case 0:  // BL
             return BL_i;
-            break;
         case 1:  // BR ... SWAP
             if (MASK001X(inst))
                 return decode_SRA_to_SWAP(inst);
             else
                 return decode_BR_to_CLRCC(inst);
-            break;
         case 2:  // LD or ST
             return decode_LD_ST(inst);
-            break;
         case 3:
-            printf("Illegal instruction\n");
-            break;
+            return decode_ADDX_SUBX_CMPX(inst);
         case 4:  // MOVL, MOVLZ
         case 5:  // MOVLS, MOVH
             return MOVx_i;
-            break;
         case 6:  // LDR
         case 7:  // STR
             return decode_LDR_STR(inst);
-            break;
         default:
             printf("invalid\n");
     }
     return END_i;
+}
+
+// decode new instructions introduced in assignment 2
+short decode_ADDX_SUBX_CMPX(unsigned short inst)
+{
+    unsigned short Mask11_10 = (inst >> 10) & 0x03;
+
+    switch (Mask11_10)
+    {
+        case 0:
+            return ADDX_i;
+        case 1:
+            return SUBX_i;
+        case 2:
+            return CMPX_i;
+        default:
+            printf("invalid\n");
+    }
 }
 
 // any instruction between and including BR and CLRCC get further processed here

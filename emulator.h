@@ -62,6 +62,7 @@ extern short decode_LD_ST(unsigned short inst);
 extern short decode_LDR_STR(unsigned short inst);
 extern short decode_BR_to_CLRCC(unsigned short inst);
 extern short decode_SRA_to_SWAP(unsigned short inst);
+extern short decode_ADDX_SUBX_CMPX(unsigned short inst);
 // ****************************************
 
 enum ACTION { read, write };
@@ -73,8 +74,9 @@ enum OPCODE10XX {MOVL, MOVLZ, MOVLS, MOVH};
 enum OPCODE0011 {SRAorRRC, ADD, ADDC, SUB, SUBC, CMP, XOR, AND, OR, BIT, BIS, BIC, MOV, MOV_SRA, SWAP, SWAP_SRA};
 enum CEX_INSTR { EQ, NE, CS_HS, CC_LO, MI, PL, VS, VC, HI, LS, GE, LT, GT, LE, TR, FL };
 
-typedef enum INSTRUCTIONS { BL_i, BR_i, CEX_i, SWPB_i, SXT_i, SRAorRRC_i, ADD_i, ADDC_i, SUB_i, SUBC_i, CMP_i, XOR_i, AND_i, OR_i,
-        BIT_i, BIS_i, BIC_i, MOV_i, SWAP_i, LD_i, ST_i, MOVx_i, LDR_i, STR_i, END_i } INSTRUCTIONS;
+typedef enum INSTRUCTIONS { BL_i, BR_i, CEX_i, SWPB_i, SXT_i, SRAorRRC_i, ADD_i, ADDC_i, ADDX_i, SUB_i, SUBC_i, SUBX_i,
+                            CMP_i, CMPX_i, XOR_i, AND_i, OR_i, BIT_i, BIS_i, BIC_i, MOV_i, SWAP_i, LD_i, ST_i, MOVx_i,
+                            LDR_i, STR_i, END_i } INSTRUCTIONS;
 
 extern INSTRUCTIONS decode(unsigned short inst);
 
