@@ -29,6 +29,9 @@ int main()
 
     initial_CPU_state();
 
+    // load data/instructions into main memory
+    loader();
+
     while (1)
     {
         printf("\n***** XMX Emulator - User Interface *****\n");
@@ -47,8 +50,6 @@ int main()
 
         if (strcmp(UI, "r") == 0)  // run
         {
-            // load data/instructions into main memory
-            loader();
             while (PC != breakpoint)
             {
                 IR = fetch();
