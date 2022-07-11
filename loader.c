@@ -68,7 +68,7 @@ int loader()
             sscanf(&srec[pos], "%2x", &rec_chksum);
             checksum = checksum + rec_chksum;
 
-            if (checksum != 0xff)
+            if ((checksum & 0x0F) != 0x0F)
             {
                 printf("bad checksum %s", srec);
                 // continue;
@@ -92,7 +92,7 @@ int loader()
             sscanf(&srec[pos], "%2x", &rec_chksum);
             checksum = checksum + rec_chksum;
 
-            if ((checksum & 0xFF) != 0xFF || (checksum & 0x0F) != 0x0F)
+            if ((checksum & 0x0F) != 0x0F)
             {
                 printf("bad checksum: %s", srec);
                 // continue;
@@ -117,7 +117,7 @@ int loader()
             if (custom_PC == CLEAR)
                 PC = address;  // assign program counter to starting addr
 
-            if ((checksum & 0xFF) != 0xFF || (checksum & 0xF) != 0xF)
+            if ((checksum & 0x0F) != 0x0F)
             {
                 printf("bad checksum: %s", srec);
                 // continue;
