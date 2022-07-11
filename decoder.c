@@ -48,6 +48,7 @@ short decode_ADDX_SUBX_CMPX(unsigned short inst)
         default:
             printf("invalid\n");
     }
+    return END_i;
 }
 
 // any instruction between and including BR and CLRCC get further processed here
