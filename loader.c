@@ -115,7 +115,7 @@ int loader()
             checksum = checksum + rec_chksum;
 
             if (custom_PC == CLEAR)
-                PC = address;  // assign program counter to starting addr
+                regfile[0][15].word = address;  // assign program counter to starting addr
 
             if ((checksum & 0x0F) != 0x0F)
             {

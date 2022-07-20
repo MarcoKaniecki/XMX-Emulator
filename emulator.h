@@ -27,7 +27,6 @@
 #define FALSE       0
 #define CLEAR       0
 #define NUL         0
-#define LF          10
 #define MEM_DUMP_SEGMENT_SIZE 16
 
 // *********** Initial CPU state **********
@@ -73,6 +72,7 @@ enum LD_ST_ADDRESSING {direct, indexed};
 enum OPCODE10XX {MOVL, MOVLZ, MOVLS, MOVH};
 enum OPCODE0011 {SRAorRRC, ADD, ADDC, SUB, SUBC, CMP, XOR, AND, OR, BIT, BIS, BIC, MOV, MOV_SRA, SWAP, SWAP_SRA};
 enum CEX_INSTR { EQ, NE, CS_HS, CC_LO, MI, PL, VS, VC, HI, LS, GE, LT, GT, LE, TR, FL };
+enum NEW_INSTR {ADDX, SUBX, CMPX};
 
 typedef enum INSTRUCTIONS { BL_i, BR_i, CEX_i, SWPB_i, SXT_i, SRAorRRC_i, ADD_i, ADDC_i, ADDX_i, SUB_i, SUBC_i, SUBX_i,
                             CMP_i, CMPX_i, XOR_i, AND_i, OR_i, BIT_i, BIS_i, BIC_i, MOV_i, SWAP_i, LD_i, ST_i, MOVx_i,
@@ -155,6 +155,7 @@ extern void BIx_instr(unsigned short instr, unsigned short RC, enum SIZE bw, uns
 extern void LDR_STR_instr(unsigned short instr, unsigned short SDRA ,unsigned short OFF, enum SIZE bw, unsigned short SRC, unsigned short DST);
 extern void LD_instr(unsigned short DI, unsigned short SDRA, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short ADR, unsigned short DST);
 extern void ST_instr(unsigned short DI, unsigned short SDRA, unsigned short PRPO, unsigned short ID, enum SIZE bw, unsigned short SRC, unsigned short ADR);
+extern void ADDX_SUBX_CMPX_instr(unsigned short instr_name, unsigned short instr);
 
 // Functions provided by Dr. Hughes
 extern unsigned short sign_ext(unsigned short offset, unsigned short signbit);

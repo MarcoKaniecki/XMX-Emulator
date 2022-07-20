@@ -38,14 +38,23 @@ void execute(INSTRUCTIONS inst, unsigned short full_inst)
         case ADDC_i:
             ADDtoOR_instr(ADDC, EXTR_SC(full_inst), DEST(full_inst), PSW.C, EXTR_RC(full_inst), EXTR_WB(full_inst));
             break;
+        case ADDX_i:
+            ADDX_SUBX_CMPX_instr(ADDX, full_inst);
+            break;
         case SUB_i:
             ADDtoOR_instr(SUB, EXTR_SC(full_inst), DEST(full_inst), 1, EXTR_RC(full_inst), EXTR_WB(full_inst));
             break;
         case SUBC_i:
             ADDtoOR_instr(SUBC, EXTR_SC(full_inst), DEST(full_inst), PSW.C, EXTR_RC(full_inst), EXTR_WB(full_inst));
             break;
+        case SUBX_i:
+            ADDX_SUBX_CMPX_instr(SUBX, full_inst);
+            break;
         case CMP_i:
             ADDtoOR_instr(CMP, EXTR_SC(full_inst), DEST(full_inst), 0, EXTR_RC(full_inst), EXTR_WB(full_inst));
+            break;
+        case CMPX_i:
+            ADDX_SUBX_CMPX_instr(CMPX, full_inst);
             break;
         case XOR_i:
             ADDtoOR_instr(XOR, EXTR_SC(full_inst), DEST(full_inst), 0, EXTR_RC(full_inst), EXTR_WB(full_inst));
@@ -174,6 +183,67 @@ void SWPB_instr(unsigned short DST)
     temp.byte[0] = regfile[0][DST].byte[0];
     regfile[0][DST].byte[0] = regfile[0][DST].byte[1];
     regfile[0][DST].byte[1] = temp.byte[0];
+}
+
+// NEW instructions - allow adding/subtracting/comparing of data and addressing registers
+void ADDX_SUBX_CMPX_instr(unsigned short instr_name, unsigned short instr)
+{
+    union word_byte result;
+    unsigned short WB = EXTR_WB(instr);
+    unsigned short RC = EXTR_RC(instr);
+    unsigned short SRA = EXTR_SRA(instr, Bit9);
+    unsigned short DRA = EXTR_DRA(instr, Bit8);
+    unsigned short SRC = EXTR_SC(instr);
+    unsigned short DST = DEST(instr);
+
+    srcnum = regfile[RC][SRC | SRA << 3];
+    dstnum = regfile[0][DST | DRA << 3];
+
+    if (WB == word)
+    {
+        switch (instr_name)
+        {
+            case ADDX:
+                result.word = dstnum.word + srcnum.word + PSW.C;
+                update_psw(srcnum.word, dstnum.word, result.word, word);
+                break;
+            case SUBX:
+                result.word = dstnum.word + ~srcnum.word + PSW.C;
+                update_psw(~srcnum.word, dstnum.word, result.word, word);
+                break;
+            case CMPX:
+                result.word = dstnum.word + ~srcnum.word + 1;
+                update_psw(~srcnum.word, dstnum.word, result.word, word);
+                break;
+            default:
+                printf("invalid\n");
+        }
+        if (instr != CMPX)
+            regfile[0][DST | DRA << 3].word = result.word;
+    }
+    else  // byte
+    {
+        switch (instr_name)
+        {
+            case ADDX:
+                result.byte[0] = dstnum.byte[0] + srcnum.byte[0] + PSW.C;
+                update_psw(srcnum.byte[0], dstnum.byte[0], result.byte[0], byte);
+                break;
+            case SUBX:
+                result.byte[0] = dstnum.byte[0] + ~srcnum.byte[0] + PSW.C;
+                update_psw(~srcnum.byte[0], dstnum.byte[0], result.byte[0], byte);
+                break;
+            case CMPX:
+                result.byte[0] = dstnum.byte[0] + ~srcnum.byte[0] + 1;
+                update_psw(~srcnum.byte[0], dstnum.byte[0], result.byte[0], byte);
+                break;
+            default:
+                printf("invalid\n");
+        }
+        if (instr != CMPX)
+            regfile[0][DST | DRA << 3].byte[0] = result.byte[0];
+    }
+
 }
 
 // performs all ADD to OR instructions
