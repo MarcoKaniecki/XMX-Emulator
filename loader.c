@@ -37,7 +37,7 @@ int loader()
         // srec - 4 to remove type, count, LF and NUL and /2 to have number of bytes
         if (count != (strlen(srec) - 6) / 2)
         {
-            printf("bad count: %s", srec);
+            // printf("bad count: %s", srec);
             // continue;
         }
 
@@ -70,7 +70,7 @@ int loader()
 
             if ((checksum & 0x0F) != 0x0F)
             {
-                printf("bad checksum %s", srec);
+                // printf("bad checksum %s", srec);
                 // continue;
             }
             printf("\n");
@@ -94,7 +94,7 @@ int loader()
 
             if ((checksum & 0x0F) != 0x0F)
             {
-                printf("bad checksum: %s", srec);
+                // printf("bad checksum: %s", srec);
                 // continue;
             }
         }
@@ -119,7 +119,7 @@ int loader()
 
             if ((checksum & 0x0F) != 0x0F)
             {
-                printf("bad checksum: %s", srec);
+                // printf("bad checksum: %s", srec);
                 // continue;
             }
         }

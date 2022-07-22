@@ -100,9 +100,9 @@ typedef struct cex
     unsigned short TorF;
     unsigned short T_count;
     unsigned short F_count;
-}cex;
+} cex;
 
-cex CEX;
+extern cex CEX;
 
 union mem
 {

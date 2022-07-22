@@ -5,6 +5,8 @@ unsigned long CPU_CLOCK = 0;
 unsigned short breakpoint = breakpoint_default;  // default breakpoint to not interrupt program
 unsigned short custom_PC = CLEAR;  // initially custom_PC location is clear so loader gets PC location from S-Records
 
+cex CEX;
+
 FILE *infile;
 char srec[MAX_REC_LEN];
 

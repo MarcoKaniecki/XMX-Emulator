@@ -208,10 +208,6 @@ void ADDX_SUBX_CMPX_instr(unsigned short instr_name, unsigned short instr)
                 update_psw(srcnum.word, dstnum.word, result.word, word);
                 break;
             case SUBX:
-                printf("word carry: %d\n", PSW.C);
-                result.word = dstnum.word + ~srcnum.word + PSW.C;
-                update_psw(~srcnum.word, dstnum.word, result.word, word);
-                break;
             case CMPX:
                 result.word = dstnum.word + ~srcnum.word + 1;
                 update_psw(~srcnum.word, dstnum.word, result.word, word);
@@ -219,7 +215,7 @@ void ADDX_SUBX_CMPX_instr(unsigned short instr_name, unsigned short instr)
             default:
                 printf("invalid\n");
         }
-        if (instr != CMPX)
+        if (instr_name != CMPX)
             regfile[0][DST | DRA << 3].word = result.word;
     }
     else  // byte
@@ -231,10 +227,6 @@ void ADDX_SUBX_CMPX_instr(unsigned short instr_name, unsigned short instr)
                 update_psw(srcnum.byte[0], dstnum.byte[0], result.byte[0], byte);
                 break;
             case SUBX:
-                printf("byte carry: %d\n", PSW.C);
-                result.byte[0] = dstnum.byte[0] + ~srcnum.byte[0] + PSW.C;
-                update_psw(~srcnum.byte[0], dstnum.byte[0], result.byte[0], byte);
-                break;
             case CMPX:
                 result.byte[0] = dstnum.byte[0] + ~srcnum.byte[0] + 1;
                 update_psw(~srcnum.byte[0], dstnum.byte[0], result.byte[0], byte);
@@ -242,7 +234,7 @@ void ADDX_SUBX_CMPX_instr(unsigned short instr_name, unsigned short instr)
             default:
                 printf("invalid\n");
         }
-        if (instr != CMPX)
+        if (instr_name != CMPX)
             regfile[0][DST | DRA << 3].byte[0] = result.byte[0];
     }
 
