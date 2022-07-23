@@ -26,20 +26,14 @@ int loader()
 
         // check if first char is valid
         if (type != 'S' || (type_num > 2 && type_num < 9))
-        {
             printf("bad type: %s", srec);
-            // continue;
-        }
 
         sscanf(&srec[2], "%2x", &count);
 
         // check if count is correct
-        // srec - 4 to remove type, count, LF and NUL and /2 to have number of bytes
-        if (count != (strlen(srec) - 6) / 2)
-        {
-            // printf("bad count: %s", srec);
-            // continue;
-        }
+        // srec - 5 to remove type, count, and LF, and /2 to have number of bytes
+        if (count != (strlen(srec) - 5) / 2)
+            printf("bad count: %s", srec);
 
         sscanf(&srec[4], "%2x%2x", &ahi, &alo);
 
@@ -69,10 +63,7 @@ int loader()
             checksum = checksum + rec_chksum;
 
             if ((checksum & 0x0F) != 0x0F)
-            {
-                // printf("bad checksum %s", srec);
-                // continue;
-            }
+                printf("bad checksum %s", srec);
             printf("\n");
         }
         else if (type_num == '1')  // data/instr
@@ -93,10 +84,7 @@ int loader()
             checksum = checksum + rec_chksum;
 
             if ((checksum & 0x0F) != 0x0F)
-            {
-                // printf("bad checksum: %s", srec);
-                // continue;
-            }
+                printf("bad checksum: %s", srec);
         }
         else if (type_num == '9')
         {
@@ -118,14 +106,11 @@ int loader()
                 regfile[0][15].word = address;  // assign program counter to starting addr
 
             if ((checksum & 0x0F) != 0x0F)
-            {
-                // printf("bad checksum: %s", srec);
-                // continue;
-            }
+                printf("bad checksum: %s", srec);
         }
     }
 
-    printf("********** LOADER DONE **********\n");
+    printf("LOADER DONE\n");
     fclose(infile);
     return 0;
 }
