@@ -25,14 +25,14 @@ int loader()
         sscanf(&srec[1], "%c", &type_num);
 
         // check if first char is valid
-        if (type != 'S' || (type_num > 2 && type_num < 9))
+        if (type != 'S' || (type_num > S1_REC && type_num < S9_REC))
             printf("bad type: %s", srec);
 
         sscanf(&srec[2], "%2x", &count);
 
         // check if count is correct
         // srec - 5 to remove type, count, and LF, and /2 to have number of bytes
-        if (count != (strlen(srec) - 5) / 2)
+        if (count != (strlen(srec) - TYPE_COUNT_LF_LEN) / 2)
             printf("bad count: %s", srec);
 
         sscanf(&srec[4], "%2x%2x", &ahi, &alo);
@@ -43,7 +43,7 @@ int loader()
         checksum = address + count;
 
         // determine data
-        int pos = 8;
+        int pos = LOADER_DATA_INIT_POS;
         count = count - 2;
 
         // header

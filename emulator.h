@@ -26,6 +26,10 @@
 #define OFF_state   0
 #define FALSE       0
 #define CLEAR       0
+#define S9_REC      9
+#define S1_REC      1
+#define TYPE_COUNT_LF_LEN 5
+#define LOADER_DATA_INIT_POS 8
 #define MEM_DUMP_SEGMENT_SIZE 16
 
 // *********** Initial CPU state **********
