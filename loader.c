@@ -90,7 +90,7 @@ int loader()
         {
             pos = 2;
             sscanf(&srec[pos], "%2x", &count);
-            pos+=2;
+            pos += 2;
 
             while (count != 1)
             {

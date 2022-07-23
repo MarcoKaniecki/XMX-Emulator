@@ -26,7 +26,6 @@
 #define OFF_state   0
 #define FALSE       0
 #define CLEAR       0
-#define NUL         0
 #define MEM_DUMP_SEGMENT_SIZE 16
 
 // *********** Initial CPU state **********
